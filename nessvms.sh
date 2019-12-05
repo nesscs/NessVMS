@@ -2,8 +2,8 @@
 #Update Server
 sudo apt update && apt upgrade
 #Grab some dependencies
-apt install wget
-apt install gdebi
+sudo apt install wget
+sudo apt install gdebi
 #Download the latest Nx Server Release
 wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-server-4.0.0.29987-linux64.deb" /Downloads
 #Download the latest Nx Desktop Client Release
