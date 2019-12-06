@@ -1,5 +1,6 @@
 #Ness VMS Server Setup Script
 #Grab some dependencies
+sudo apt -y update
 sudo apt -y install figlet beep gdebi cockpit
 #Remove Amazon Crap
 echo "Remove Amazon Stuff" | figlet
@@ -13,7 +14,6 @@ sudo apt -y clean
 sudo apt -y autoremove
 #Update Server
 echo "Update Server" | figlet
-sudo apt -y update
 sudo apt -y upgrade
 #Download the latest Nx Server Release
 echo "Download NxWitness" | figlet
