@@ -1,6 +1,6 @@
 #Ness VMS Server Setup Script
 #Grab some dependencies
-sudo apt -y install figlet beep wget gdebi cockpit
+sudo apt -y install figlet beep gdebi cockpit
 #Remove Amazon Crap
 echo "Remove Amazon Stuff" | figlet
 sudo rm /usr/share/applications/ubuntu-amazon-default.desktop
@@ -8,7 +8,7 @@ sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/Amazon.user.js
 sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
 #Remove Extra stuff
 echo "Remove Other Apps" | figlet
-sudo apt -y purge libreoffice* thunderbird
+sudo apt -y purge libreoffice* thunderbird rhythmbox
 sudo apt -y clean
 sudo apt -y autoremove
 #Update Server
