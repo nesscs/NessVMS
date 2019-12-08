@@ -1,7 +1,9 @@
 #Ness VMS Server Setup Script
 #Grab some dependencies
 echo "Grab some dependencies"
+sudo killall apt apt-get
 sudo apt update
+sudo killall apt apt-get
 sudo apt -y install figlet beep gdebi cockpit
 #Remove Amazon Crap
 echo "Remove Amazon Stuff" | figlet
