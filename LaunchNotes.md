@@ -1,9 +1,38 @@
-curl -s https://raw.githubusercontent.com/TurboLabIt/zzupdate/master/setup.sh | sudo sh
-
-sudo bash
-
 https://raw.githubusercontent.com/kvellaNess/NxVMS/master/nessvms.sh
 
-wget -O - https://raw.githubusercontent.com/kvellaNess/NxVMS/master/nessvms.sh | bash
+This works!!
+wget -O - https://github.com/kvellaNess/NxVMS/raw/master/nessvms.sh | bash
+This Works!!
 
-sudo bash <(wget -qO- https://raw.githubusercontent.com/kvellaNess/NxVMS/master/nessvms.sh)
+#Try and stop the updater
+sudo service unattended-upgrades status
+sudo service unattended-upgrades stop
+sudo systemctl stop unattended-upgrades
+sudo systemctl disable apt-daily.timer
+
+
+top
+sudo systemctl stop apt-daily.service
+sudo systemctl kill --kill-who=all apt-daily.service
+# wait until `apt-get updated` has been killed
+while ! (systemctl list-units --all apt-daily.service | egrep -q '(dead|failed)')
+do
+  sleep 1;
+done
+echo "done"
+
+
+
+
+
+systemctl stop apt-daily.service
+systemctl kill --kill-who=all apt-daily.service
+while ! (systemctl list-units --all apt-daily.service | fgrep -q dead)
+do
+  sleep 1;
+done
+
+#Wait for daily upgrade
+while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 1; done
+
+sed -E -i 's#http://[^\s]*archive\.ubuntu\.com/ubuntu#http://au.archive.ubuntu.com/ubuntu#g' /etc/apt/sources.list' /etc/apt/sources.list
