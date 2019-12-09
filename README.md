@@ -1,7 +1,12 @@
 # NxVMS Install Script
 
-Setup Scripts for Ness VMS Servers, this will delete unecessary pakages, install required dependencies, 
-update the server and then download/install Nx Witness Media Server and Client.
+Setup Scripts for Ness VMS Servers, this will:
+1. Set Auto Updates for Australian Servers
+2. Delete unecessary pakages
+3. Install required dependencies
+4. Update Server OS
+5. Download & install Nx Witness Media Server & Client.
+6. Download & Set NxWitness Wallpaper
 
 ## Installation
 
