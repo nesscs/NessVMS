@@ -74,4 +74,40 @@ gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pict
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
 #Finished!
+echo ""
+echo ""
+echo ""
+echo ""
 echo "All Done!" | figlet
+#Flash!
+echo off
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
+printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
+sleep 0.5
