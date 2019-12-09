@@ -2,13 +2,31 @@
 #https://github.com/kvellaNess/NxVMS
 #Disable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 86400
-#Wait for Audo updgrades to finish
+#Wait for Auto updgrades to finish
 echo ""
 echo ""
 echo -e "\e[7mWaiting for Auto Upgrades to finish, this can take some time"
 echo ""
 echo ""
 while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 10; done
+#Remove Amazon Shortcuts
+echo ""
+echo ""
+echo -e "\e[7mRemove Amazon Shortcuts"
+echo ""
+echo ""
+sudo rm /usr/share/applications/ubuntu-amazon-default.desktop
+sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/Amazon.user.js
+sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
+#Remove Extra Uneeded Apps
+echo ""
+echo ""
+echo -e "\e[7mRemove Extra Uneeded Apps"
+echo ""
+echo ""
+sudo apt -y purge libreoffice* thunderbird rhythmbox
+sudo apt -y clean
+sudo apt -y autoremove
 #Grab some dependencies
 echo ""
 echo ""
@@ -16,36 +34,18 @@ echo -e "\e[7mGrab some dependencies"
 echo ""
 echo ""
 sudo apt update
-sudo apt -y install figlet gdebi cockpit
-#Remove Amazon Crap
+sudo apt -y install gdebi cockpit
+#Catch all Update Server
 echo ""
 echo ""
-echo "Remove Amazon Stuff" | figlet
-echo ""
-echo ""
-sudo rm /usr/share/applications/ubuntu-amazon-default.desktop
-sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/Amazon.user.js
-sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
-#Remove Extra stuff
-echo ""
-echo ""
-echo "Remove Other Apps" | figlet
-echo ""
-echo ""
-sudo apt -y purge libreoffice* thunderbird rhythmbox
-sudo apt -y clean
-sudo apt -y autoremove
-#Update Server
-echo ""
-echo ""
-echo "Update Server" | figlet
+echo -e "\e[7mUpdate Server"
 echo ""
 echo ""
 sudo apt -y upgrade
 #Download the latest Nx Server Release
 echo ""
 echo ""
-echo "Download NxWitness" | figlet
+echo -e "\e[7mDownload NxWitness"
 echo ""
 echo ""
 wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-server-4.0.0.29987-linux64.deb" -P ~/Downloads
@@ -54,7 +54,7 @@ wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-client-4.0.0
 #Install NX Server
 echo ""
 echo ""
-echo "Install NxWitness" | figlet
+echo -e "\e[7mInstall NxWitness"
 echo ""
 echo ""
 sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.29987-linux64.deb
@@ -63,7 +63,7 @@ sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.29987-linux64.de
 #Download Wallpaper
 echo ""
 echo ""
-echo "Set Wallpaper" | figlet
+echo -e "\e[7mSet Wallpaper"
 echo ""
 echo ""
 wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P ~/Pictures
@@ -78,7 +78,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo "All Done!" | figlet
+echo -e "\e[7mAll Done!
 #Flash!
 echo off
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
