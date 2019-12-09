@@ -5,14 +5,15 @@ gsettings set org.gnome.desktop.session idle-delay 86400
 #Wait for Auto updgrades to finish
 echo ""
 echo ""
-echo -e "\e[7mWaiting for Auto Upgrades to finish, this can take some time"
+echo -e "\e[7mWaiting for Auto Upgrades to finish\e[0m"
+echo "This may take a while"
 echo ""
 echo ""
 while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 10; done
 #Remove Amazon Shortcuts
 echo ""
 echo ""
-echo -e "\e[7mRemove Amazon Shortcuts"
+echo -e "\e[7mRemove Amazon Shortcuts\e[0m"
 echo ""
 echo ""
 sudo rm /usr/share/applications/ubuntu-amazon-default.desktop
@@ -21,7 +22,7 @@ sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
 #Remove Extra Uneeded Apps
 echo ""
 echo ""
-echo -e "\e[7mRemove Extra Uneeded Apps"
+echo -e "\e[7mRemove Extra Uneeded Apps\e[0m"
 echo ""
 echo ""
 sudo apt -y purge libreoffice* thunderbird rhythmbox
@@ -30,7 +31,7 @@ sudo apt -y autoremove
 #Grab some dependencies
 echo ""
 echo ""
-echo -e "\e[7mGrab some dependencies"
+echo -e "\e[7mGrab some dependencies\e[0m"
 echo ""
 echo ""
 sudo apt update
@@ -38,14 +39,15 @@ sudo apt -y install gdebi cockpit
 #Catch all Update Server
 echo ""
 echo ""
-echo -e "\e[7mUpdate Server"
+echo -e "\e[7mUpdate Server OS\e[0m"
+echo "This may take a while"
 echo ""
 echo ""
 sudo apt -y upgrade
 #Download the latest Nx Server Release
 echo ""
 echo ""
-echo -e "\e[7mDownload NxWitness"
+echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
 wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-server-4.0.0.29987-linux64.deb" -P ~/Downloads
@@ -54,7 +56,7 @@ wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-client-4.0.0
 #Install NX Server
 echo ""
 echo ""
-echo -e "\e[7mInstall NxWitness"
+echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
 sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.29987-linux64.deb
@@ -63,7 +65,7 @@ sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.29987-linux64.de
 #Download Wallpaper
 echo ""
 echo ""
-echo -e "\e[7mSet Wallpaper"
+echo -e "\e[7mSet Wallpaper\e[0m"
 echo ""
 echo ""
 wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P ~/Pictures
@@ -78,7 +80,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mAll Done!
+echo -e "\e[7mAll Done!\e[0m"
 #Flash!
 echo off
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
@@ -110,4 +112,3 @@ sleep 0.5
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
-sleep 0.5
