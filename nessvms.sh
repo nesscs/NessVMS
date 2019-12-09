@@ -37,6 +37,5 @@ wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P ~/Pictures
 #Set Wallpaper
 gsettings set org.gnome.desktop.background picture-uri 'file:////home/user/Pictures/NxBG.png'
 gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pictures/NxLock.png'
-
 #Finished!
 echo "All Done!" | figlet
