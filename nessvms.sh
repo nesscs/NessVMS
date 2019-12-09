@@ -1,4 +1,7 @@
 #Ness VMS Server Setup Script
+#Disable Auto Updates for now
+sudo service unattended-upgrades stop
+
 #Grab some dependencies
 echo "Grab some dependencies"
 sudo killall apt apt-get
@@ -28,5 +31,12 @@ echo "Install NxWitness" | figlet
 sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.29987-linux64.deb
 #Install Nx Client
 sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.29987-linux64.deb
+#Download Wallpaper
+wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P ~/Pictures
+wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P ~/Pictures
+#Set Wallpaper
+gsettings set org.gnome.desktop.background picture-uri 'file:////home/user/Pictures/NxBG.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pictures/NxLock.png'
+
 #Finished!
 echo "All Done!" | figlet
