@@ -10,6 +10,7 @@ Press Ctrl-Alt-T to launch the system terminal and type in this command:
 ```bash
 sudo wget -O - https://github.com/kvellaNess/NxVMS/raw/master/nessvms.sh | bash
 ```
+Enter your password when prompted
 
 ## Support
 Contact Kieran for changes.
