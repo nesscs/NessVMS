@@ -1,5 +1,7 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
+#Set Repo's to Australia
+sudo sed -i 's|http://archive.|http://au.archive.|g' /etc/apt/sources.list
 #Disable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 86400
 #Wait for Auto updgrades to finish
