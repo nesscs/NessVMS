@@ -1,7 +1,15 @@
 # NxVMS Install Script
 
-Setup Scripts for Ness VMS Servers, this will delete unecessary pakages, install required dependencies, 
-update the server and then download/install Nx Witness Media Server and Client.
+Setup Scripts for Ness VMS Servers, this will:
+1. Set Auto Updates for Australian Servers
+2. Delete unecessary pakages
+3. Install required dependencies
+4. Update Server OS
+5. Download & install Nx Witness Media Server & Client.
+6. Download & Set NxWitness Wallpaper
+
+## Requirements
+You have installed the latest version of Ubuntu LTS 18.04.3 on your VMS Hardware
 
 ## Installation
 
@@ -10,6 +18,7 @@ Press Ctrl-Alt-T to launch the system terminal and type in this command:
 ```bash
 sudo wget -O - https://github.com/kvellaNess/NxVMS/raw/master/nessvms.sh | bash
 ```
+Enter your password when prompted
 
 ## Support
 Contact Kieran for changes.
