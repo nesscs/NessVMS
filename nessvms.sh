@@ -53,9 +53,9 @@ echo ""
 echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
-wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-server-4.0.0.29987-linux64.deb" -P ~/Downloads
+wget "http://updates.networkoptix.com/default/30107/linux/nxwitness-server-4.0.0.30107-linux64.deb" -P ~/Downloads
 #Download the latest Nx Desktop Client Release
-wget "http://updates.networkoptix.com/default/29987/linux/nxwitness-client-4.0.0.29987-linux64.deb" -P ~/Downloads
+wget "http://updates.networkoptix.com/default/30107/linux/nxwitness-client-4.0.0.30107-linux64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
