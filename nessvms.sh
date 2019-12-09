@@ -5,14 +5,14 @@ gsettings set org.gnome.desktop.session idle-delay 86400
 #Wait for Audo updgrades to finish
 echo ""
 echo ""
-echo "Waiting for Auto Upgrades to finish, this can take some time"
+echo -e "\e[7mWaiting for Auto Upgrades to finish, this can take some time"
 echo ""
 echo ""
 while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 10; done
 #Grab some dependencies
 echo ""
 echo ""
-echo "Grab some dependencies"
+echo -e "\e[7mGrab some dependencies"
 echo ""
 echo ""
 sudo apt update
