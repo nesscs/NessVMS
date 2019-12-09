@@ -1,6 +1,7 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
-#Disable Auto Updates for now
+#Stop Auto Updates for now
+sudo pkill unattended-upgrades
 sudo systemctl stop apt-daily.service
 sudo systemctl kill --kill-who=all apt-daily.service
 while ! (systemctl list-units --all apt-daily.service | fgrep -q dead)
@@ -42,7 +43,6 @@ wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P ~/Pictures
 gsettings set org.gnome.desktop.background picture-uri 'file:////home/user/Pictures/NxBG.png'
 gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pictures/NxLock.png'
 #Restart Auto Updates
-sudo systemctl enable apt-daily.timer
-sudo systemctl enable apt-daily-upgrade.timer
+sudo systemctl start apt-daily.service
 #Finished!
 echo "All Done!" | figlet
