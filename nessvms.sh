@@ -1,7 +1,7 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
 #Wait for updates
-while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 1; done
+while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 10; done
 #Grab some dependencies
 echo "Grab some dependencies"
 sudo apt update
