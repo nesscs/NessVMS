@@ -61,6 +61,7 @@ wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P ~/Pictures
 gsettings set org.gnome.desktop.background picture-uri 'file:////home/user/Pictures/NxBG.png'
 gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pictures/NxLock.png'
 #Restart Auto Updates
-sudo service unattended-upgrades start
+sudo systemctl enable apt-daily.timer
+sudo systemctl enable apt-daily-upgrade.timer
 #Finished!
 echo "All Done!" | figlet
