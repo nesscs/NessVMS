@@ -8,7 +8,7 @@ update the server and then download/install Nx Witness Media Server and Client.
 Press Ctrl-Alt-T to launch the system terminal and type in this command:
 
 ```bash
-wget -O - https://raw.githubusercontent.com/kvellaNess/NxVMS/master/nessvms.sh | bash
+wget -O - https://github.com/kvellaNess/NxVMS/raw/master/nessvms.sh | bash
 ```
 
 ## Support
