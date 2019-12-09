@@ -12,7 +12,7 @@ echo -e "\e[7mWaiting for Auto Upgrades to finish\e[0m"
 echo "This may take a while"
 echo ""
 echo ""
-while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 10; done
+while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 20; done
 #Remove Amazon Shortcuts
 echo ""
 echo ""
@@ -85,7 +85,6 @@ echo ""
 echo ""
 echo -e "\e[7mAll Done!\e[0m"
 #Flash!
-echo off
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
