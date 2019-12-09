@@ -8,6 +8,9 @@ Setup Scripts for Ness VMS Servers, this will:
 5. Download & install Nx Witness Media Server & Client.
 6. Download & Set NxWitness Wallpaper
 
+## Requirements
+You have installed the latest version of Ubuntu LTS 18.04.3 on your VMS Hardware
+
 ## Installation
 
 Press Ctrl-Alt-T to launch the system terminal and type in this command:
