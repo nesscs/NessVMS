@@ -1,12 +1,32 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
 #Disable Auto Updates for now
+set -e
+function killService() {
+    service=$1
+    sudo systemctl stop $service
+    sudo systemctl kill --kill-who=all $service
+    # Wait until the status of the service is either exited or killed.
+    while ! (sudo systemctl status "$service" | grep -q "Main.*code=\(exited\|killed\)")
+    do
+        sleep 10
+    done
+}
+function disableTimers() {
+    sudo systemctl disable apt-daily.timer
+    sudo systemctl disable apt-daily-upgrade.timer
+}
+function killServices() {
+    killService unattended-upgrades.service
+    killService apt-daily.service
+    killService apt-daily-upgrade.service
+}
+function main() {
+    disableTimers
+    killServices
+}
+main
 sudo pkill unattended-upgrades
-sudo service unattended-upgrades stop
-#sudo rm /var/lib/apt/lists/lock
-#sudo rm /var/cache/apt/archives/lock
-#sudo rm /var/lib/dpkg/lock*
-#sudo dpkg --configure -a
 #Grab some dependencies
 echo "Grab some dependencies"
 sudo apt update
