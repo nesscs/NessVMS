@@ -1,12 +1,14 @@
 #Ness VMS Server Setup Script
 #Disable Auto Updates for now
 sudo service unattended-upgrades stop
-
+sudo killall apt apt-get
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock*
+sudo dpkg --configure -a
 #Grab some dependencies
 echo "Grab some dependencies"
-sudo killall apt apt-get
 sudo apt update
-sudo killall apt apt-get
 sudo apt -y install figlet beep gdebi cockpit
 #Remove Amazon Crap
 echo "Remove Amazon Stuff" | figlet
@@ -37,5 +39,7 @@ wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P ~/Pictures
 #Set Wallpaper
 gsettings set org.gnome.desktop.background picture-uri 'file:////home/user/Pictures/NxBG.png'
 gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pictures/NxLock.png'
+#Restart Auto Updates
+sudo service unattended-upgrades start
 #Finished!
 echo "All Done!" | figlet
