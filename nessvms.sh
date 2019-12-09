@@ -16,7 +16,7 @@ echo -e "\e[7mGrab some dependencies"
 echo ""
 echo ""
 sudo apt update
-sudo apt -y install figlet beep gdebi cockpit
+sudo apt -y install figlet gdebi cockpit
 #Remove Amazon Crap
 echo ""
 echo ""
