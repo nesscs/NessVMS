@@ -26,7 +26,7 @@ Contact Kieran for changes.
 ## License
 MIT License
 
-Copyright (c) 2019 Kieran Vella
+Copyright (c) 2019 Ness Corporation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
