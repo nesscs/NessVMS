@@ -62,9 +62,9 @@ echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.29987-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.30107-linux64.deb
 #Install Nx Client
-sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.29987-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.30107-linux64.deb
 #Download Wallpaper
 echo ""
 echo ""
