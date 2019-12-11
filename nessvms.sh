@@ -37,7 +37,6 @@ echo ""
 echo -e "\e[7mGrab some dependencies\e[0m"
 echo ""
 echo ""
-sudo apt update
 sudo apt -y install gdebi cockpit
 #Catch all Update Server
 echo ""
