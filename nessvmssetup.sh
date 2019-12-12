@@ -70,11 +70,11 @@ echo ""
 echo -e "\e[7mSet Wallpaper\e[0m"
 echo ""
 echo ""
-wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P ~/Pictures
-wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P ~/Pictures
+sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P /opt/Ness/Wallpaper
 #Set Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file:////home/user/Pictures/NxBG.png'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file:////home/user/Pictures/NxLock.png'
+gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/NxBG.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/NxLock.png'
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
 #Finished!
