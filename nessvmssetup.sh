@@ -1,5 +1,7 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
+#Set Machine Hostname
+sudo hostnamectl set-hostname NessVMS-$RANDOM
 #Set Repo's to Australia
 sudo sed -i 's|http://archive.|http://au.archive.|g' /etc/apt/sources.list
 sudo apt update
