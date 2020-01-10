@@ -1,44 +1,29 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
-#Set Machine Hostname
-sudo hostnamectl set-hostname NessVMS-$RANDOM
+#Set Machine Hostname to Last 4 digits of Eth0
+macaddy=$(cat /sys/class/net/enp2s0/address | tr -d ':' | grep -o '....$')
+sudo hostnamectl set-hostname NessVMS-$macaddy
 #Set Repo's to Australia
 sudo sed -i 's|http://archive.|http://au.archive.|g' /etc/apt/sources.list
 sudo apt update
 #Disable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 86400
 #Wait for Auto updgrades to finish
-echo ""
-echo ""
 echo -e "\e[7mWaiting for Auto Upgrades to finish\e[0m"
 echo "This may take a while"
-echo ""
-echo ""
 while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 20; done
 #Remove Amazon Shortcuts
-echo ""
-echo ""
 echo -e "\e[7mRemove Amazon Shortcuts\e[0m"
-echo ""
-echo ""
 sudo rm /usr/share/applications/ubuntu-amazon-default.desktop
 sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/Amazon.user.js
 sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
 #Remove Extra Uneeded Apps
-echo ""
-echo ""
 echo -e "\e[7mRemove Extra Uneeded Apps\e[0m"
-echo ""
-echo ""
 sudo apt -y purge libreoffice* thunderbird rhythmbox aisleriot cheese gnome-mahjongg gnome-mines gnome-sudoku transmission*
 sudo apt -y clean
 sudo apt -y autoremove
-#Grab some dependencies
-echo ""
-echo ""
-echo -e "\e[7mGrab some dependencies\e[0m"
-echo ""
-echo ""
+#Grab dependencies
+echo -e "\e[7mGrab dependencies\e[0m"
 sudo apt -y install gdebi cockpit
 #Catch all Update Server
 echo ""
@@ -67,11 +52,7 @@ sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.30107-linux64.de
 #Install Nx Client
 sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.30107-linux64.deb
 #Download Wallpaper
-echo ""
-echo ""
 echo -e "\e[7mSet Wallpaper\e[0m"
-echo ""
-echo ""
 sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P /opt/Ness/Wallpaper
 sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P /opt/Ness/Wallpaper
 #Set Wallpaper
