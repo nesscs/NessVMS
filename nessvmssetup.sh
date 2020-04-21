@@ -52,7 +52,7 @@ sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.30107-linux64.de
 #Install Nx Client
 sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.30107-linux64.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
-sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
+sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
 sudo service networkoptix-mediaserver restart
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
