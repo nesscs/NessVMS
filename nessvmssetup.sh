@@ -39,18 +39,18 @@ echo ""
 echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
-wget "http://updates.networkoptix.com/default/30707/linux/nxwitness-server-4.0.0.30707-linux64.deb" -P ~/Downloads
+wget "http://updates.networkoptix.com/default/31274/linux/nxwitness-server-4.0.0.31274-linux64.deb" -P ~/Downloads
 #Download the latest Nx Desktop Client Release
-wget "http://updates.networkoptix.com/default/30707/linux/nxwitness-client-4.0.0.30707-linux64.deb" -P ~/Downloads
+wget "http://updates.networkoptix.com/default/31274/linux/nxwitness-client-4.0.0.31274-linux64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.30707-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.0.0.31274-linux64.deb
 #Install Nx Client
-sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.30707-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.0.0.31274-linux64.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
 sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
 sudo service networkoptix-mediaserver restart
