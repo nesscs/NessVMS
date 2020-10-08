@@ -22,9 +22,6 @@ echo -e "\e[7mRemove Extra Uneeded Apps\e[0m"
 sudo apt -y purge libreoffice* thunderbird rhythmbox aisleriot cheese gnome-mahjongg gnome-mines gnome-sudoku transmission*
 sudo apt -y clean
 sudo apt -y autoremove
-#Grab dependencies
-echo -e "\e[7mGrab dependencies\e[0m"
-sudo apt -y install gdebi cockpit
 #Catch all Update Server
 echo ""
 echo ""
