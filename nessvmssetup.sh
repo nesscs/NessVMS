@@ -39,28 +39,28 @@ echo ""
 echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
-wget "http://updates.networkoptix.com/default/31398/linux/nxwitness-server-4.1.0.31398-linux64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/31767/linux/nxwitness-server-4.1.0.31767-linux64-patch.deb" -P ~/Downloads
 #Download the latest Nx Desktop Client Release
-wget "http://updates.networkoptix.com/default/31398/linux/nxwitness-client-4.1.0.31398-linux64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/31767/linux/nxwitness-client-4.1.0.31767-linux64-patch.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.1.0.31398-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.1.0.31767-linux64-patch.deb
 #Install Nx Client
-sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.1.0.31398-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.1.0.31767-linux64-patch.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
 sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
 sudo service networkoptix-mediaserver restart
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
-sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P /opt/Ness/Wallpaper
-sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxBG.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxLock.png" -P /opt/Ness/Wallpaper
 #Set Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/NxBG.png'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/NxLock.png'
+gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/20201009.NxBG.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/20201009.NxLock.png'
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
 #Finished!
