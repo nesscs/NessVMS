@@ -24,7 +24,7 @@ sudo apt -y clean
 sudo apt -y autoremove
 #Grab dependencies
 echo -e "\e[7mGrab dependencies\e[0m"
-sudo apt -y install gdebi cockpit
+sudo apt -y install gdebi
 #Catch all Update Server
 echo ""
 echo ""
@@ -56,11 +56,11 @@ sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/med
 sudo service networkoptix-mediaserver restart
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
-sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxBG.png" -P /opt/Ness/Wallpaper
-sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/NxLock.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxBG.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxLock.png" -P /opt/Ness/Wallpaper
 #Set Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/NxBG.png'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/NxLock.png'
+gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/20201009.NxBG.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/20201009.NxLock.png'
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
 #Finished!
