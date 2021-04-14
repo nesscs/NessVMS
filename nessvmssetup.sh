@@ -1,7 +1,7 @@
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
 #Set Machine Hostname to Last 4 digits of Eth0
-macaddy=$(cat /sys/class/net/enp3s0/address | tr -d ':' | grep -o '....$')
+macaddy=$(cat /sys/class/net/enp4s0/address | tr -d ':' | grep -o '....$')
 sudo hostnamectl set-hostname NessVMS-$macaddy
 #Set Repo's to Australia
 sudo sed -i 's|http://archive.|http://au.archive.|g' /etc/apt/sources.list
