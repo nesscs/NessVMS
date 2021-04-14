@@ -24,7 +24,7 @@ sudo apt -y clean
 sudo apt -y autoremove
 #Grab dependencies
 echo -e "\e[7mGrab dependencies\e[0m"
-sudo apt -y install gdebi
+sudo apt -y install gdebi cockpit
 #Catch all Update Server
 echo ""
 echo ""
@@ -40,8 +40,6 @@ echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
 wget "https://updates.networkoptix.com/default/4.2.0.32658/linux/nxwitness-server-4.2.0.32658-linux64.deb" -P ~/Downloads
-#Download the latest Nx Desktop Client Release
-wget "https://updates.networkoptix.com/default/4.2.0.32658/linux/nxwitness-client-4.2.0.32658-linux64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
@@ -49,8 +47,6 @@ echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
 sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.2.0.32658-linux64.deb
-#Install Nx Client
-sudo gdebi --non-interactive ~/Downloads/nxwitness-client-4.2.0.32658-linux64.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
 sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
 sudo service networkoptix-mediaserver restart
