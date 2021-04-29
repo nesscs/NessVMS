@@ -39,14 +39,14 @@ echo ""
 echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
-wget "https://updates.networkoptix.com/default/4.2.0.32658/linux/nxwitness-server-4.2.0.32658-linux64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/4.2.0.32840/linux/nxwitness-server-4.2.0.32840-linux64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.2.0.32658-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.2.0.32840-linux64.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
 sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
 sudo service networkoptix-mediaserver restart
