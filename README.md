@@ -16,7 +16,7 @@ You have installed the latest version of Ubuntu LTS 18.04.3 on your VMS Hardware
 Press Ctrl-Alt-T to launch the system terminal and type in this command:
 
 ```bash
-sudo wget -O - https://git.io/nessvms | bash
+sudo wget -O - https://nesscs.com/nessvms | bash
 ```
 Enter your password when prompted
 
