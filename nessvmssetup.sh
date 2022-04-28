@@ -1,3 +1,4 @@
+#!/bin/bash
 #Ness VMS Server Setup Script
 #https://github.com/kvellaNess/NxVMS
 #Set Machine Hostname to Last 4 digits of Eth0
