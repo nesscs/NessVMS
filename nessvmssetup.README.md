@@ -9,7 +9,8 @@ Setup Scripts for Ness VMS Servers, this will:
 6. Download & Set NxWitness Wallpaper
 
 ## Warning
-Although these scripts are public facing, they are not intended for general consumption. Do not blindly run these scrips, they are unsupported. You WILL NOT receive technical support if you run these without direction.
+Although these scripts are public facing, they are not intended for general consumption. Do not blindly run these scrips, they are unsupported. 
+You WILL NOT receive technical support if you run these without direction.
 
 ## Requirements
 You have installed the latest version of Ubuntu LTS 18.04.3 on your VMS Hardware
