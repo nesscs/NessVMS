@@ -1,6 +1,8 @@
 # NxVMS Scripts
 
-Scripts to ease the roll out of Ness VMS Boxes
+Scripts to ease the roll out of Ness VMS Boxes. 
+
+## Although these scripts are public facing, they are not intended for general consumption. Do not blindly run these scrips, they are unsupported
 
 [NessVMS Script Readme](https://github.com/kvellaNess/NxVMS/blob/master/nessvmssetup.README.md)
 
