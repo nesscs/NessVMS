@@ -31,7 +31,7 @@ sudo wget -O - https://nesscs.com/nx5 | bash
 ```
 
 ## Uninstall Script
-To remove Nx Witness software you can run this script, it will not remove footage:
+To cleanly remove Nx Witness software you can run this script, it will not remove footage:
 ```bash
 sudo wget -O - https://nesscs.com/uninstallnxwitness | bash
 ```
