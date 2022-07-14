@@ -24,6 +24,18 @@ sudo wget -O - https://nesscs.com/nessvms | bash
 ```
 Enter your password when prompted
 
+For legacy support, older scrips are available, eg:
+```bash
+sudo wget -O - https://nesscs.com/nx4 | bash
+sudo wget -O - https://nesscs.com/nx5 | bash
+```
+
+## Uninstall Script
+To remove Nx Witness software you can run this script, it will not remove footage:
+```bash
+sudo wget -O - https://nesscs.com/uninstallnxwitness | bash
+```
+
 ## Support
 Contact Kieran for changes.
 

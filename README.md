@@ -7,9 +7,9 @@ Although these scripts are public facing, they are not intended for general cons
 You WILL NOT receive technical support if you run these without direction.
 
 ## Instructions
-[NessVMS Script Readme](https://github.com/kvellaNess/NxVMS/blob/master/nessvmssetup.README.md)
+[NessVMS Script Readme](https://github.com/nesscs/NxVMS/blob/master/nessvmssetup.README.md)
 
-[VMS 4 Power Tweak Readme](https://github.com/kvellaNess/NxVMS/blob/master/vms4power.README.md)
+[VMS 4 Power Tweak Readme](https://github.com/nesscs/NxVMS/blob/master/vms4power.README.md)
 
 
 ## Support
