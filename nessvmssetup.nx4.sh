@@ -1,6 +1,8 @@
 #!/bin/bash
 #Ness VMS Server Setup Script
-#https://github.com/kvellaNess/NxVMS
+#https://github.com/nesscs/NxVMS
+#This script is unsupported, do not blindly run it
+
 #Set Machine Hostname to Last 4 digits of Eth0
 macaddy=$(cat /sys/class/net/enp3s0/address | tr -d ':' | grep -o '....$')
 sudo hostnamectl set-hostname NessVMS-$macaddy
@@ -40,24 +42,24 @@ echo ""
 echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
-wget "https://updates.networkoptix.com/default/4.2.0.32840/linux/nxwitness-server-4.2.0.32840-linux64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/4.2.0.34860/linux/nxwitness-server-4.2.0.34860-linux64-patch.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.2.0.32840-linux64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.2.0.34860-linux64-patch.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
 sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
 sudo service networkoptix-mediaserver restart
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
-sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxBG.png" -P /opt/Ness/Wallpaper
-sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxLock.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx4bg.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx4lock.png" -P /opt/Ness/Wallpaper
 #Set Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/20201009.NxBG.png'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/20201009.NxLock.png'
+gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/nx4bg.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/nx4lock.png'
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
 #Finished!
