@@ -1,7 +1,7 @@
 #!/bin/bash
 #Ness VMS Server Setup Script
 #https://github.com/nesscs/NxVMS
-#This scrips is for Nx Witness V4
+#This script is for Nx Witness V4
 #This script is unsupported, do not blindly run it
 
 #Set Machine Hostname to Last 4 digits of Eth0
