@@ -5,7 +5,7 @@ Setup Scripts for Ness VMS Servers, this will:
 2. Delete unecessary pakages
 3. Install required dependencies
 4. Update Server OS
-5. Download & install Nx Witness Media Server & Client.
+5. Download & install Nx Witness Media Server.
 6. Download & Set NxWitness Wallpaper
 
 ## Warning
