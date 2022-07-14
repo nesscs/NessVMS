@@ -1,5 +1,3 @@
-https://raw.githubusercontent.com/kvellaNess/NxVMS/master/nessvms.sh
-
 This works!!
 wget -O - https://github.com/kvellaNess/NxVMS/raw/master/nessvms.sh | bash
 This Works!!
