@@ -40,17 +40,17 @@ echo ""
 echo -e "\e[7mDownload NxWitness\e[0m"
 echo ""
 echo ""
-wget "https://updates.networkoptix.com/default/35064/linux/nxwitness-server-5.0.0.35064-linux_x64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/4.2.0.32840/linux/nxwitness-server-4.2.0.32840-linux64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/nxwitness-server-5.0.0.35064-linux_x64.deb
+sudo gdebi --non-interactive ~/Downloads/nxwitness-server-4.2.0.32840-linux64.deb
 #Configure Nx Server to enumerate removeable Storage then restart service
-# sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
-# sudo service networkoptix-mediaserver restart
+sudo sed -i "$ a allowRemovableStorages=1" /opt/networkoptix/mediaserver/etc/mediaserver.conf
+sudo service networkoptix-mediaserver restart
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
 sudo wget "https://github.com/kvellaNess/NxVMS/raw/master/wallpaper/20201009.NxBG.png" -P /opt/Ness/Wallpaper
