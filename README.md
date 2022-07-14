@@ -13,7 +13,7 @@ You WILL NOT receive technical support if you run these without direction.
 
 
 ## Support
-Contact Kieran for changes.
+There is no support! Contact Kieran for changes.
 
 ## License
 MIT License

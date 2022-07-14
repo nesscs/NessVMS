@@ -37,7 +37,7 @@ sudo wget -O - https://nesscs.com/uninstallnxwitness | bash
 ```
 
 ## Support
-Contact Kieran for changes.
+There is no support! Contact Kieran for changes.
 
 ## License
 MIT License

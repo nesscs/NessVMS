@@ -19,7 +19,7 @@ sudo wget -O - https://nesscs.com/vms4power | bash
 Enter your password when prompted
 
 ## Support
-Contact Kieran for changes.
+There is no support! Contact Kieran for changes.
 
 ## License
 MIT License
