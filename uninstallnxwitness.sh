@@ -7,8 +7,8 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel\e[0m"
-echo -e "\e[7m10\e[0m"
+echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel\e[0m" \
+"\e[7m10\e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -18,8 +18,8 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel\e[0m"
-echo -e "\e[7m09\e[0m"
+echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel\e[0m" \
+"\e[7m09\e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
