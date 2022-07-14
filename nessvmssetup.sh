@@ -25,7 +25,7 @@ sudo apt -y clean
 sudo apt -y autoremove
 #Grab dependencies
 echo -e "\e[7mGrab dependencies\e[0m"
-sudo apt -y install gdebi cockpit
+sudo apt -y install gdebi cockpit screen
 #Catch all Update Server
 echo ""
 echo ""

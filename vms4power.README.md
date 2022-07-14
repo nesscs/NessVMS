@@ -5,6 +5,10 @@ This script injects a command line into Grub as directed via Hikvision to tweak 
 ## Requirements
 You have installed the latest version of Ubuntu LTS 18.04.3 on your VMS Hardware
 
+## Warning
+Although these scripts are public facing, they are not intended for general consumption. Do not blindly run these scrips, they are unsupported. 
+You WILL NOT receive technical support if you run these without direction.
+
 ## Installation
 
 Press Ctrl-Alt-T to launch the system terminal and type in this command:
