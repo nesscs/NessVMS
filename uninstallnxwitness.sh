@@ -7,7 +7,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        10 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   10 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -17,7 +17,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        09 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   09 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -27,7 +27,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        08 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   08 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -37,7 +37,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        07 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   07 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -47,7 +47,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        06 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   06 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -57,7 +57,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        05 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   05 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -67,7 +67,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        04 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   04 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -77,7 +77,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        03 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   03 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -87,7 +87,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        02 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   02 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -97,7 +97,7 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        01 \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   01 \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 0.5
@@ -107,10 +107,11 @@ echo ""
 echo ""
 echo ""
 echo ""
-echo -e "\e[7mYou are about to wipe NxWitness, CTRL - C to cancel        Too Late! \e[0m\"
+echo -e "\e[7mYou are about to wipe Nx Witness! CTRL - C to Cancel   Too Late! \e[0m"
 #Flash!
 printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
-sleep 1.0
+sleep 0.5
+
 
 #Stop Nx Witness
 sudo service networkoptix-mediaserver stop
