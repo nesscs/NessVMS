@@ -2,10 +2,9 @@
 #Ness VMS Server uninstall Script
 #https://github.com/nesscs/NxVMS
 #This script is unsupported, do not blindly run it
-
 while true; do
 
-read -p "This will wipe your Nxwitness install and its settings. Do you want to proceed? (y/n) " yn
+read -p "Do you want to proceed? (y/n) " yn
 
 case $yn in 
 	[yY] ) echo ok, we will proceed;
@@ -17,6 +16,7 @@ esac
 
 done
 
+echo doing stuff...
 echo Uninstalling...
 
 #Stop Nx Witness
