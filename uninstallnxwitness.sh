@@ -3,6 +3,22 @@
 #https://github.com/nesscs/NxVMS
 #This script is unsupported, do not blindly run it
 
+while true; do
+
+read -p "This will wipe your Nxwitness install and its settings. Do you want to proceed? (y/n) " yn
+
+case $yn in 
+	[yY] ) echo ok, we will proceed;
+		break;;
+	[nN] ) echo exiting...;
+		exit;;
+	* ) echo invalid response;;
+esac
+
+done
+
+echo Uninstalling...
+
 #Stop Nx Witness
 sudo service networkoptix-mediaserver stop
 
