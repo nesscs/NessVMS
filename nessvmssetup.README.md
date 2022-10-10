@@ -24,7 +24,7 @@ sudo wget -O - https://nesscs.com/nessvms | bash
 ```
 Enter your password when prompted
 
-For legacy support, older scrips are available, the names should be self explanatory eg:
+For legacy support of older versions of Nxwitness, these scripts are available, the names should be self explanatory eg:
 ```bash
 sudo wget -O - https://nesscs.com/nx4 | bash
 sudo wget -O - https://nesscs.com/nx5 | bash
