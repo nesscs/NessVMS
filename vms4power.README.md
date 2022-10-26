@@ -18,6 +18,17 @@ sudo wget -O - https://nesscs.com/vms4power | bash
 ```
 Enter your password when prompted
 
+## Un-Installation
+
+Press Ctrl-Alt-T to launch the system terminal and type in this command:
+
+This will check for the presence of the original boot file on the system, If the system did not have the patch run, it wont do anything.
+
+```bash
+sudo wget -O - https://nesscs.com/vms4powerdisble | bash
+```
+Enter your password when prompted
+
 ## Support
 There is no support! Contact Kieran for changes.
 
