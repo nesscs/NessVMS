@@ -1,14 +1,14 @@
 #!/bin/bash
 # Disable Ness VMS4 Power tweak
 #https://github.com/nesscs/NxVMS
-#Backup patched power file
-sudo cp /etc/default/grub /etc/default/grub.powepatch
 #Check the old file exists and copy it across
 FILE=/etc/default/grub.old
 if [ -f "$FILE" ]; then
     echo "$FILE exists."
+    #Backup patched power file
+    sudo cp /etc/default/grub /etc/default/grub.powepatch
     #Restore old file
-    sudo cp /etc/default/grub.old /etc/default/grub
+    sudo cp -fr /etc/default/grub.old /etc/default/grub
     #Update Grub file with new command line
     sudo update-grub
     #Finished!
