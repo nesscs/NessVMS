@@ -1,6 +1,6 @@
 #!/bin/bash
 #Ness VMS Server uninstall Script
-#https://github.com/nesscs/NxVMS
+#https://github.com/nesscs/NessVMS
 #This script is unsupported, do not blindly run it
 clear
 echo ""
