@@ -1,12 +1,12 @@
-# NxVMS Install Script
+# NessVMS Install Script
 
 Setup Scripts for Ness VMS Servers, this will:
 1. Set Auto Updates for Australian Servers
 2. Delete unecessary pakages
 3. Install required dependencies
 4. Update Server OS
-5. Download & install Nx Witness Media Server.
-6. Download & Set NxWitness Wallpaper
+5. Download & install Video management software.
+6. Download & Set Wallpaper
 
 ## Warning
 Although these scripts are public facing, they are not intended for general consumption. Do not blindly run these scrips, they are unsupported. 
@@ -28,14 +28,15 @@ For legacy support of older versions of Nxwitness, these scripts are available, 
 ```bash
 sudo wget -O - https://nesscs.com/nx4 | bash
 sudo wget -O - https://nesscs.com/nx5 | bash
+sudo wget -O - https://nesscs.com/dw5 | bash
 ```
 
 ## Uninstall Script
-To cleanly remove Nx Witness software you can run this script, it will not remove footage.
+To cleanly remove Video Management Software you can run this script, it will not remove footage.
 
-**Note:** There is no confirmation, this script will run and nuke your NxWitness install
+**Note:** There is no confirmation, this script will run and nuke your VMS install
 ```bash
-sudo wget -O - https://nesscs.com/uninstallnxwitness | bash
+sudo wget -O - https://nesscs.com/uninstallvms | bash
 ```
 
 ## Support
