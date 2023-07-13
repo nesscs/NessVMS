@@ -28,7 +28,7 @@ sudo apt -y clean
 sudo apt -y autoremove
 #Grab dependencies
 echo -e "\e[7mGrab dependencies\e[0m"
-sudo apt -y install gdebi cockpit screen
+sudo apt -y install gdebi cockpit screen unzip
 #Catch all Update Server
 echo ""
 echo ""
@@ -43,14 +43,16 @@ echo ""
 echo -e "\e[7mDownload DW Spectrum \e[0m"
 echo ""
 echo ""
-wget "https://dw2020.s3.us-west-1.amazonaws.com/dw2023/dwspectrum-server-5.0.0.36183-linux_x64.deb" -P ~/Downloads
+wget "https://digital-watchdog.com/admin/assets/_downloads/dwspectrum-server-5.0.0.36871-linux_x64.zip" -P ~/Downloads
+#Extract Zip File, Thanks for making things difficult guys
+unzip ~/Downloads/dwspectrum-server-5.0.0.36871-linux_x64.zip
 #Install DW Spectrum Server
 echo ""
 echo ""
 echo -e "\e[7mInstall DW Spectrum \e[0m"
 echo ""
 echo ""
-sudo gdebi --non-interactive ~/Downloads/dwspectrum-server-5.0.0.36183-linux_x64.deb
+sudo gdebi --non-interactive ~/Downloads/dwspectrum-server-5.0.0.36871-linux_x64.deb
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
 sudo wget "https://github.com/nesscs/NessVMS/raw/master/wallpaper/dw5bg.png" -P /opt/Ness/Wallpaper
