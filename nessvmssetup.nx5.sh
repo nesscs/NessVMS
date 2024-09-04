@@ -28,7 +28,7 @@ sudo apt -y clean
 sudo apt -y autoremove
 #Grab dependencies
 echo -e "\e[7mGrab dependencies\e[0m"
-sudo apt -y install gdebi cockpit screen
+sudo apt -y install cockpit screen
 #Catch all Update Server
 echo ""
 echo ""
@@ -51,7 +51,8 @@ echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
 # sudo gdebi --non-interactive ~/Downloads/nxwitness-server-5.0.0.35745-linux_x64.deb
-sudo gdebi ~/Downloads/nxwitness-server-5.0.0.35745-linux_x64.deb
+sudo apt install -y ~/Downloads/nxwitness-server-5.0.0.35745-linux_x64.deb
+sudo apt install -f -y
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
 sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx5bg.png" -P /opt/Ness/Wallpaper
