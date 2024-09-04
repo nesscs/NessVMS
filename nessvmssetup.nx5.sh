@@ -52,20 +52,20 @@ gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wall
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
 #Download the latest Nx Server Release, enter desired build below
-nx_build=39242 #Builds from here https://updates.networkoptix.com/default/
+nx_build=5.1.5.39242 #Builds from here https://updates.networkoptix.com/default/ Note full build No.
 echo ""
 echo ""
 echo -e "\e[7mDownload NxWitness Build $nx_build\e[0m"
 echo ""
 echo ""
-wget "https://updates.networkoptix.com/default/5.0.0.$nx_build/linux/nxwitness-server-5.0.0.$nx_build-linux_x64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/$nx_build/linux/nxwitness-server-$nx_build-linux_x64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo apt install -y ~/Downloads/nxwitness-server-5.0.0.$nx_build-linux_x64.deb
+sudo apt install -y ~/Downloads/nxwitness-server-$nx_build-linux_x64.deb
 sudo apt install -f -y
 #Finished!
 echo ""
