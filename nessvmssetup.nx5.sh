@@ -4,9 +4,14 @@
 #This script is for Nx Witness V5
 #This script is unsupported, do not blindly run it
 
-#Set Machine Hostname to Last 4 digits of Eth0
-macaddy=$(cat /sys/class/net/enp1s0/address | tr -d ':' | grep -o '....$')
-sudo hostnamectl set-hostname NessVMS-$macaddy
+#Set Machine Hostname to Last 4 digits of Network Interface
+interface=$(ip route | grep '^default' | awk '{print $5}') # Get the primary network interface (e.g., eth0, enp3s0, etc.)
+mac_address=$(cat /sys/class/net/$interface/address) # Get the MAC address of the primary network interface
+last_four_digits=$(echo "$mac_address" | awk -F: '{print $(NF-1) $NF}') # Extract the last 4 digits of the MAC address
+current_hostname=$(hostname) # Get the current hostname
+new_hostname="${current_hostname}${last_four_digits}" # Append the last 4 digits of the MAC address to the hostname
+sudo hostnamectl set-hostname "$new_hostname" # Set the new hostname
+
 #Set Repo's to Australia
 sudo sed -i 's|http://archive.|http://au.archive.|g' /etc/apt/sources.list
 sudo apt update
@@ -46,20 +51,21 @@ gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallp
 gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/nx5lock.png'
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
-#Download the latest Nx Server Release
+#Download the latest Nx Server Release, enter desired build below
+nx_build=39242 #Builds from here https://updates.networkoptix.com/default/
 echo ""
 echo ""
-echo -e "\e[7mDownload NxWitness\e[0m"
+echo -e "\e[7mDownload NxWitness Build $nx_build\e[0m"
 echo ""
 echo ""
-wget "https://updates.networkoptix.com/default/5.0.0.35745/linux/nxwitness-server-5.0.0.35745-linux_x64.deb" -P ~/Downloads
+wget "https://updates.networkoptix.com/default/5.0.0.$nx_build/linux/nxwitness-server-5.0.0.$nx_build-linux_x64.deb" -P ~/Downloads
 #Install NX Server
 echo ""
 echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo apt install -y ~/Downloads/nxwitness-server-5.0.0.35745-linux_x64.deb
+sudo apt install -y ~/Downloads/nxwitness-server-5.0.0.$nx_build-linux_x64.deb
 sudo apt install -f -y
 #Finished!
 echo ""
