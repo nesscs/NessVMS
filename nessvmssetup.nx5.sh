@@ -5,7 +5,7 @@
 #This script is unsupported, do not blindly run it
 
 #Set Machine Hostname to Last 4 digits of Eth0
-macaddy=$(cat /sys/class/net/enp3s0/address | tr -d ':' | grep -o '....$')
+macaddy=$(cat /sys/class/net/enp1s0/address | tr -d ':' | grep -o '....$')
 sudo hostnamectl set-hostname NessVMS-$macaddy
 #Set Repo's to Australia
 sudo sed -i 's|http://archive.|http://au.archive.|g' /etc/apt/sources.list
@@ -37,6 +37,15 @@ echo "This may take a while"
 echo ""
 echo ""
 sudo apt -y upgrade
+#Download Wallpaper
+echo -e "\e[7mSet Wallpaper\e[0m"
+sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx5bg.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx5lock.png" -P /opt/Ness/Wallpaper
+#Set Wallpaper
+gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/nx5bg.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/nx5lock.png'
+#ReEnable Screensaver
+gsettings set org.gnome.desktop.session idle-delay 600
 #Download the latest Nx Server Release
 echo ""
 echo ""
@@ -50,18 +59,8 @@ echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-# sudo gdebi --non-interactive ~/Downloads/nxwitness-server-5.0.0.35745-linux_x64.deb
 sudo apt install -y ~/Downloads/nxwitness-server-5.0.0.35745-linux_x64.deb
 sudo apt install -f -y
-#Download Wallpaper
-echo -e "\e[7mSet Wallpaper\e[0m"
-sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx5bg.png" -P /opt/Ness/Wallpaper
-sudo wget "https://github.com/nesscs/NxVMS/raw/master/wallpaper/nx5lock.png" -P /opt/Ness/Wallpaper
-#Set Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/nx5bg.png'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/nx5lock.png'
-#ReEnable Screensaver
-gsettings set org.gnome.desktop.session idle-delay 600
 #Finished!
 echo ""
 echo ""
