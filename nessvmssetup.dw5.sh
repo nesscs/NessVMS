@@ -41,7 +41,7 @@ echo -e "\e[7mUpdate Server OS\e[0m"
 echo "This may take a while"
 echo ""
 echo ""
-sudo apt -y upgrade
+sudo apt upgrade -y
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
 sudo wget "https://github.com/nesscs/NessVMS/raw/master/wallpaper/dw5bg.png" -P /opt/Ness/Wallpaper
