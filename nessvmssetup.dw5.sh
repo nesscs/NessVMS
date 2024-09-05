@@ -51,7 +51,7 @@ gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallp
 gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/dw5lock.png'
 #ReEnable Screensaver
 gsettings set org.gnome.desktop.session idle-delay 600
-#Download the latest DW Spectrum Server Release, enter dsired build below
+#Download the latest DW Spectrum Server Release, enter desired build below
 dx_build=5.1.5.39242 #Builds from here https://updates.digital-watchdog.com/digitalwatchdog/ Note full build No.
 echo ""
 echo ""
