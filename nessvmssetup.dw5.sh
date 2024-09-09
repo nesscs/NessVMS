@@ -65,8 +65,8 @@ echo ""
 echo -e "\e[7mInstall DW Spectrum \e[0m"
 echo ""
 echo ""
-sudo apt install -y  ~/dwspectrum-server-$dx_build.-linux_x64.deb
-sudo apt install -f -y
+sudo DEBIAN_FRONTEND=noninteractive apt install -y ~/Downloads/dwspectrum-server-$dx_version-linux_x64.deb
+sudo DEBIAN_FRONTEND=noninteractive apt install -f -y
 #Finished!
 echo ""
 echo ""
