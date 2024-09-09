@@ -65,8 +65,8 @@ echo ""
 echo -e "\e[7mInstall NxWitness\e[0m"
 echo ""
 echo ""
-sudo apt install -y ~/Downloads/nxwitness-server-$nx_build-linux_x64.deb
-sudo apt install -f -y
+sudo DEBIAN_FRONTEND=noninteractive apt install -y ~/Downloads/nxwitness-server-$nx_build-linux_x64.deb
+sudo DEBIAN_FRONTEND=noninteractive apt install -f -y
 #Finished!
 echo ""
 echo ""
