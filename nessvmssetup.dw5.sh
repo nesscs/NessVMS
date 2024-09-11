@@ -9,7 +9,7 @@ interface=$(ip route | grep '^default' | awk '{print $5}') # Get the primary net
 mac_address=$(cat /sys/class/net/$interface/address) # Get the MAC address of the primary network interface
 last_four_digits=$(echo "$mac_address" | awk -F: '{print $(NF-1) $NF}') # Extract the last 4 digits of the MAC address
 current_hostname=$(hostname) # Get the current hostname
-new_hostname="${current_hostname}${last_four_digits}" # Append the last 4 digits of the MAC address to the hostname
+new_hostname="${current_hostname}-${last_four_digits}" # Append the last 4 digits of the MAC address to the hostname
 sudo hostnamectl set-hostname "$new_hostname" # Set the new hostname
 
 #Set Repo's to Australia
@@ -29,28 +29,17 @@ sudo rm /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
 #Remove Extra Uneeded Apps
 echo -e "\e[7mRemove Extra Uneeded Apps\e[0m"
 sudo apt -y purge libreoffice* thunderbird rhythmbox aisleriot cheese gnome-mahjongg gnome-mines gnome-sudoku transmission*
-sudo apt -y clean
-sudo apt -y autoremove
 #Grab dependencies
 echo -e "\e[7mGrab dependencies\e[0m"
 sudo apt -y install gdebi cockpit screen unzip
-#Catch all Update Server
+#Catch all Upgrade Server OS
 echo ""
 echo ""
-echo -e "\e[7mUpdate Server OS\e[0m"
+echo -e "\e[7mUpgrade Server OS\e[0m"
 echo "This may take a while"
 echo ""
 echo ""
 sudo apt upgrade -y
-#Download Wallpaper
-echo -e "\e[7mSet Wallpaper\e[0m"
-sudo wget "https://github.com/nesscs/NessVMS/raw/master/wallpaper/dw5bg.png" -P /opt/Ness/Wallpaper
-sudo wget "https://github.com/nesscs/NessVMS/raw/master/wallpaper/dw5lock.png" -P /opt/Ness/Wallpaper
-#Set Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/dw5bg.png'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/dw5lock.png'
-#ReEnable Screensaver
-gsettings set org.gnome.desktop.session idle-delay 600
 #Download the latest DW Spectrum Server Release, enter desired build below
 dx_build=5.1.5.39242 #Builds from here https://updates.digital-watchdog.com/digitalwatchdog/ Note full build No.
 echo ""
@@ -67,6 +56,19 @@ echo ""
 echo ""
 sudo DEBIAN_FRONTEND=noninteractive apt install -y ~/Downloads/dwspectrum-server-$dx_version-linux_x64.deb
 sudo DEBIAN_FRONTEND=noninteractive apt install -f -y
+#Download Wallpaper
+echo -e "\e[7mSet Wallpaper\e[0m"
+sudo wget "https://github.com/nesscs/NessVMS/raw/master/wallpaper/dw5bg.png" -P /opt/Ness/Wallpaper
+sudo wget "https://github.com/nesscs/NessVMS/raw/master/wallpaper/dw5lock.png" -P /opt/Ness/Wallpaper
+#Set Wallpaper
+gsettings set org.gnome.desktop.background picture-uri 'file://///opt/Ness/Wallpaper/dw5bg.png'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file://///opt/Ness/Wallpaper/dw5lock.png'
+#ReEnable Screensaver
+gsettings set org.gnome.desktop.session idle-delay 600
+#Final Cleanup
+sudo apt -y upgrade
+sudo apt -y clean
+sudo apt -y autoremove
 #Finished!
 echo ""
 echo ""
