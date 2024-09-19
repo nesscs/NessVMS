@@ -54,7 +54,7 @@ echo ""
 echo -e "\e[7mInstall DW Spectrum \e[0m"
 echo ""
 echo ""
-sudo DEBIAN_FRONTEND=noninteractive apt install -y ~/Downloads/dwspectrum-server-$dx_version-linux_x64.deb
+sudo DEBIAN_FRONTEND=noninteractive apt install -y ~/Downloads/dwspectrum-server-$dx_build-linux_x64.deb
 sudo DEBIAN_FRONTEND=noninteractive apt install -f -y
 #Download Wallpaper
 echo -e "\e[7mSet Wallpaper\e[0m"
