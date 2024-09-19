@@ -47,7 +47,7 @@ echo ""
 echo -e "\e[7mDownload DW Spectrum Build $dx_build \e[0m"
 echo ""
 echo ""
-wget "https://updates.digital-watchdog.com/digitalwatchdog/$dx_build/linux/dwspectrum-server-$dx_build.-linux_x64.deb" -P ~/Downloads
+wget "https://updates.digital-watchdog.com/digitalwatchdog/$dx_build/linux/dwspectrum-server-$dx_build-linux_x64.deb" -P ~/Downloads
 #Install DW Spectrum Server
 echo ""
 echo ""
