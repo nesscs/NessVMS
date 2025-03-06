@@ -43,7 +43,7 @@ sudo wget -O - https://nesscs.com/dw6 | bash
 ## Uninstall Script
 To cleanly remove Video Management Software you can run this script, it will not remove footage.
 
-**Note:** There is no confirmation, this script will run and nuke your VMS install
+**Note:** There is no confirmation, this script will run and remove your VMS install
 ```bash
 sudo wget -O - https://nesscs.com/uninstallvms | bash
 ```
