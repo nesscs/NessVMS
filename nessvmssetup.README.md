@@ -13,22 +13,31 @@ Although these scripts are public facing, they are not intended for general cons
 You WILL NOT receive technical support if you run these without direction.
 
 ## Requirements
-You have installed the latest version of Ubuntu LTS 18.04.3 on your VMS Hardware
+You have installed the latest version of Ubuntu LTS 24.04 on your VMS Hardware
 
 ## Installation
 
-Press Ctrl-Alt-T to launch the system terminal and type in this command:
+Press Ctrl-Alt-T to launch the system terminal and type in this command to install Nx Witness:
 
 ```bash
 sudo wget -O - https://nesscs.com/nessvms | bash
 ```
+
+Press Ctrl-Alt-T to launch the system terminal and type in this command to install DW Spectrum:
+
+```bash
+sudo wget -O - https://nesscs.com/nessdwvms | bash
+```
+
 Enter your password when prompted
 
-For legacy support of older versions of Nxwitness, these scripts are available, the names should be self explanatory eg:
+For legacy support of older versions of Nxwitness OR DW Spectrum, these scripts are available, the names should be self explanatory eg:
 ```bash
 sudo wget -O - https://nesscs.com/nx4 | bash
 sudo wget -O - https://nesscs.com/nx5 | bash
+sudo wget -O - https://nesscs.com/nx6 | bash
 sudo wget -O - https://nesscs.com/dw5 | bash
+sudo wget -O - https://nesscs.com/dw6 | bash
 ```
 
 ## Uninstall Script
