@@ -1,4 +1,6 @@
 #!/bin/bash
+# Set the environment variable for non-interactive operation
+export DEBIAN_FRONTEND=noninteractive
 #Ness VMS Server uninstall Script
 #https://github.com/nesscs/NessVMS
 #This script is unsupported, do not blindly run it
@@ -113,11 +115,12 @@ printf "\x1b[?5h"; sleep .1; printf "\x1b[?5l"
 sleep 1.5 
 
 clear
-#Stop Nx Witness & DW Spectrum
-sudo service networkoptix-mediaserver stop
-sudo service digitalwatchdog-mediaserver stop
 
-#Uninstall Nx Witness & DW Spectrum
+# Stop Nx Witness & DW Spectrum (handle if services aren't running)
+sudo service networkoptix-mediaserver stop || true
+sudo service digitalwatchdog-mediaserver stop || true
+
+# Uninstall Nx Witness & DW Spectrum
 sudo apt remove networkoptix-client -y
 sudo apt remove networkoptix-mediaserver -y
 sudo apt remove digitalwatchdog-mediaserver -y
@@ -126,7 +129,9 @@ sudo apt remove digitalwatchdog-client -y
 sudo apt clean -y
 sudo apt autoremove -y
 
-#Remove Lingering Nx Witness Files
+# Remove Lingering Nx Witness Files
 rm -rf /opt/networkoptix/
 rm -rf /home/$USER/.config/'Network Optix'/
 rm -rf /home/$USER/.local/share/'Network Optix'/
+
+echo "Uninstallation complete."
