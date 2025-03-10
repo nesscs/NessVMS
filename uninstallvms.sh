@@ -128,12 +128,11 @@ sudo apt autoremove -y
 sudo apt clean -y
 
 # Remove Lingering Nx Witness Files
-rm -rf /opt/networkoptix/
-rm -rf /opt/digitalwatchdog/
-rm -rf /home/$USER/.config/'Network Optix'/
-rm -rf /home/$USER/.local/share/'Network Optix'/
-rm -rf /home/$USER/.config/'Digital Watchdog'/
-rm -rf /home/$USER/.local/share/'Digital Watchdog'/
-
+sudo rm -rf /opt/networkoptix/
+sudo rm -rf /opt/digitalwatchdog/
+sudo rm -rf /home/$USER/.config/'Network Optix'/
+sudo rm -rf /home/$USER/.local/share/'Network Optix'/
+sudo rm -rf /home/$USER/.config/'Digital Watchdog'/
+sudo rm -rf /home/$USER/.local/share/'Digital Watchdog'/
 
 echo "Uninstallation complete."
