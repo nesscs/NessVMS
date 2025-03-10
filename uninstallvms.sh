@@ -1,6 +1,4 @@
 #!/bin/bash
-# Set the environment variable for non-interactive operation
-export DEBIAN_FRONTEND=noninteractive
 #Ness VMS Server uninstall Script
 #https://github.com/nesscs/NessVMS
 #This script is unsupported, do not blindly run it
@@ -120,11 +118,14 @@ clear
 sudo service networkoptix-mediaserver stop || true
 sudo service digitalwatchdog-mediaserver stop || true
 
-# Uninstall Nx Witness & DW Spectrum
+# Uninstall Nx Witness & DW Spectrum Clients
 sudo apt remove networkoptix-client -y
-sudo apt remove networkoptix-mediaserver -y
-sudo apt remove digitalwatchdog-mediaserver -y
 sudo apt remove digitalwatchdog-client -y
+# Set the environment variable for non-interactive operation & remove servers
+export DEBIAN_FRONTEND=noninteractive
+sudo apt remove networkoptix-mediaserver -y
+export DEBIAN_FRONTEND=noninteractive
+sudo apt remove digitalwatchdog-mediaserver -y
 
 sudo apt clean -y
 sudo apt autoremove -y
