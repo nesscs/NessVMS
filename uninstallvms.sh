@@ -115,10 +115,16 @@ sleep 1.5
 clear
 
 # Stop Nx Witness & DW Spectrum (handle if services aren't running)
+echo ""
+echo -e "\e[7mStopping Services\e[0m"
+echo ""
 sudo service networkoptix-mediaserver stop || true
 sudo service digitalwatchdog-mediaserver stop || true
 
 # Uninstall Nx Witness & DW Spectrum Clients
+echo ""
+echo -e "\e[7mUninstalling Software\e[0m"
+echo ""
 export DEBIAN_FRONTEND=noninteractive sudo apt remove networkoptix-client -y
 export DEBIAN_FRONTEND=noninteractive sudo apt remove digitalwatchdog-client -y
 # Set the environment variable for non-interactive operation & remove servers
@@ -128,6 +134,9 @@ sudo apt autoremove -y
 sudo apt clean -y
 
 # Remove Lingering Nx Witness & DW Spectrum Files
+echo ""
+echo -e "\e[7mDeleting Lingering Files\e[0m"
+echo ""
 sudo rm -rf /opt/networkoptix/
 sudo rm -rf /opt/digitalwatchdog/
 sudo rm -rf /home/$USER/.config/'Network Optix'/
