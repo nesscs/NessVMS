@@ -124,8 +124,8 @@ export DEBIAN_FRONTEND=noninteractive sudo apt remove digitalwatchdog-client -y
 # Set the environment variable for non-interactive operation & remove servers
 export DEBIAN_FRONTEND=noninteractive sudo apt remove networkoptix-mediaserver -y
 export DEBIAN_FRONTEND=noninteractive sudo apt remove digitalwatchdog-mediaserver -y
-sudo apt clean -y
 sudo apt autoremove -y
+sudo apt clean -y
 
 # Remove Lingering Nx Witness Files
 rm -rf /opt/networkoptix/
