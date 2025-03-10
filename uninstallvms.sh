@@ -127,7 +127,7 @@ export DEBIAN_FRONTEND=noninteractive sudo apt remove digitalwatchdog-mediaserve
 sudo apt autoremove -y
 sudo apt clean -y
 
-# Remove Lingering Nx Witness Files
+# Remove Lingering Nx Witness & DW Spectrum Files
 sudo rm -rf /opt/networkoptix/
 sudo rm -rf /opt/digitalwatchdog/
 sudo rm -rf /home/$USER/.config/'Network Optix'/
