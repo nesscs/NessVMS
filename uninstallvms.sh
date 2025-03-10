@@ -121,13 +121,12 @@ echo ""
 sudo service networkoptix-mediaserver stop || true
 sudo service digitalwatchdog-mediaserver stop || true
 
-# Uninstall Nx Witness & DW Spectrum Clients
+# Uninstall Nx Witness & DW Spectrum Clients.
 echo ""
 echo -e "\e[7mUninstalling Software\e[0m"
 echo ""
 export DEBIAN_FRONTEND=noninteractive sudo apt remove networkoptix-client -y
 export DEBIAN_FRONTEND=noninteractive sudo apt remove digitalwatchdog-client -y
-# Set the environment variable for non-interactive operation & remove servers
 export DEBIAN_FRONTEND=noninteractive sudo apt remove networkoptix-mediaserver -y
 export DEBIAN_FRONTEND=noninteractive sudo apt remove digitalwatchdog-mediaserver -y
 sudo apt autoremove -y
