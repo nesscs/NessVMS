@@ -10,7 +10,7 @@ To upgrade to the latest Ubuntu LTS release you must step through all subsequent
 eg. If running 18.04 LTS you must upgrade to 20.04 LTS THEN 22.04 LTS THEN 24.04 LTS. You cannot "Upgrade" directly from 18.04 LTS to 24.04 LTS.
 
 There is supported method to upgrade Ubuntu LTS versions as detailed below. 
-As a matter of time savings, it is debateable whether one would choose to simply start a fresh new MessVMS OS install with the latest version of NessVMS OS running on Ubuntu 24.04 LTS.
+As a matter of time savings, it is debateable whether one would choose to simply start a fresh new NessVMS OS install with the latest version of NessVMS OS running on Ubuntu 24.04 LTS.
 The caveat being that you must manually deactivate/migrate/reactivate licenses and backup/restore your VMS Database. 
 
 Arguably users should already be doing this.
