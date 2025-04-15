@@ -1,18 +1,39 @@
-# Guide to upgrading Ubuntu Server LTS
+# Guide to upgrading NessVMS OS
 
 ## Warning
 Although this guide & scripts are public facing, they are not intended for general consumption. Do not blindly run these scripts, they are unsupported. 
-You WILL NOT receive technical support if you run these without direction.
 
 ## Prerequisites
-Before upgrading to latest Ubuntu version, we must take care of some important things first.
+NessVMS OS is based upon Ubuntu LTS with extremely minimal changes. Some VMS will have shipped with Ubuntu 18.04 LTS which is now end of life and soon to be unsupported by NxWitness/DW Spectrum. 
+It is recommended to upgrade to the latest Ubuntu LTS release to ensure that the OS is a supported release and covered by Security updates.
+To upgrade to the latest Ubuntu LTS release you must step through all subsequent LTS releases sequentially.
+eg. If running 18.04 LTS you must upgrade to 20.04 LTS THEN 22.04 LTS THEN 24.04 LTS. You cannot "Upgrade" directly from 18.04 LTS to 24.04 LTS.
+
+There is supported method to upgrade Ubuntu LTS versions as detailed below. 
+As a matter of time savings, it is debateable whether one would choose to simply start a fresh new MessVMS OS install with the latest version of NessVMS OS running on Ubuntu 24.04 LTS.
+The caveat being that you must manually deactivate/migrate/reactivate licenses and backup/restore your VMS Database. 
+
+Arguably users should already be doing this.
+
+Instead, it may be "simpler" to just upgrade following the recommended steps. To this end the script below has been created to assist in this method. 
+It will follow Ubuntu recommended steps to upgrade through releases and should not require the user to change anything with their NxWitness/DW Spectrum install.
+
 
 **Backup Important Data**
 
 First of all, It is strongly recommended to backup your important data, configuration files, and anything that you can’t afford to lose.
 
+## Auto Upgrade your NessVMS OS
 
-## Update Your Current Ubuntu System
+Run the following command to automatically being the NessVMS OS upgrade proces, note that you will need to repeatedly run this command until you reach the latest version.
+
+Press Ctrl-Alt-T to launch the system terminal and type in this command:
+
+```bash
+sudo wget -O - https://nesscs.com/nessvmsupgrade | bash
+```
+
+## Manually Upgrade your NessVMS OS
 
 Press Ctrl-Alt-T to launch the system terminal and type in this command:
 
@@ -27,7 +48,7 @@ Reboot after upgrading
 sudo reboot
 ```
 
-## Install Screen
+## Remote Manual Upgrade of NessVMS OS
 It is strongly recommend to use Screen tool when attempting to upgrade a remote server via SSH. This will keep running the upgrade the process in case your SSH session is dropped for any reason.
 
 To install the screen tool, Enter:
@@ -78,7 +99,7 @@ There is no support! Contact Kieran for changes.
 ## License
 MIT License
 
-Copyright (c) 2019 Ness Corporation
+Copyright (c) 2025 Ness Corporation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
