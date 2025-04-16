@@ -31,11 +31,6 @@ else
     echo "This script is intended for Ubuntu 18.04, 20.04 or 22.04 LTS.  Exiting."
     exit 1
 fi
-# Check if the script is run as root
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root.  Exiting."
-    exit 1
-fi
 
 # Function to log messages
 log() {
@@ -62,9 +57,9 @@ fi
 
 # Update the system
 log "Updating the system..."
-apt-get update -y 2>&1 | tee -a "$LOG_FILE"
-apt-get upgrade -y 2>&1 | tee -a "$LOG_FILE"
-apt-get dist-upgrade -y 2>&1 | tee -a "$LOG_FILE"
+sudo apt-get update -y 2>&1 | tee -a "$LOG_FILE"
+sudo apt-get upgrade -y 2>&1 | tee -a "$LOG_FILE"
+sudo apt-get dist-upgrade -y 2>&1 | tee -a "$LOG_FILE"
 if [ $? -ne 0 ]; then
     log "Error updating the system.  Exiting."
     exit 1
@@ -74,7 +69,7 @@ fi
 log "Upgrading to Ubuntu ${NEXT_LTS} LTS..."
 # DoUpgrade may return 1, even on success, if the system needs a reboot.
 # So, check for the existence of the new release in /etc/os-release
-do-release-upgrade -f -d 2>&1 | tee -a "$LOG_FILE"
+sudo do-release-upgrade -f -d 2>&1 | tee -a "$LOG_FILE"
 if [ $? -ne 0 ]; then
     log "Error upgrading to Ubuntu ${NEXT_LTS} LTS.  Checking /etc/os-release..."
     if grep -q "${NEXT_LTS}" /etc/os-release; then
@@ -87,7 +82,7 @@ fi
 
 # Remove obsolete packages
 log "Removing obsolete packages..."
-apt-get autoremove -y 2>&1 | tee -a "$LOG_FILE"
+sudo apt-get autoremove -y 2>&1 | tee -a "$LOG_FILE"
 if [ $? -ne 0 ]; then
     log "Error removing obsolete packages. Continuing..." #Not critical
 fi
