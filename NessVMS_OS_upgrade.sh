@@ -17,7 +17,7 @@
 #
 # Variables
 LOG_FILE="/var/log/NessVMS_OS_upgrade.log"
-UPGRADE_ release=$(lsb_release -rs) #Gets the release
+UPGRADE_release=$(lsb_release -rs) #Gets the release
 if [[ "$UPGRADE_release" == "18.04" ]];
 then
     NEXT_LTS="20.04"
