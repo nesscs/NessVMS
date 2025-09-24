@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # smartscan.sh
 # Run SMART short tests on all disks in parallel, show live progress, then PASS/FAIL per drive.
+# Run from Terminal: 
+# wget -O - https://nesscs.com/smartscan | sudo bash
 
 set -euo pipefail
 
