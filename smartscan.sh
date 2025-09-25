@@ -2,7 +2,7 @@
 # smartscan.sh
 # Run SMART short tests on all disks in parallel with robust waits + retries, show live progress, then PASS/FAIL.
 #
-# wget -O - https://nesscs.com/smartscan | sudo bash
+# sudo wget -O - https://nesscs.com/smartscan | bash
 
 set -euo pipefail
 
