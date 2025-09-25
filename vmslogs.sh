@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# logs.sh — Bare-metal power timeline summariser for Ubuntu 22.04+
+# vmslogs.sh — Bare-metal power timeline summariser for Ubuntu 22.04+
 #
 # Produces a human-readable timeline of BOOT/SHUTDOWN/REBOOT and
 # hardware-related events (power loss, watchdog, thermal, PSU, RAID, OOM, etc.)
 #
 # Usage:
-#   sudo ./logs.sh
-#   sudo ./logs.sh --since "2025-09-20" --until "2025-09-26"
-#   sudo ./logs.sh --boots 6
+#   sudo ./vmslogs.sh
+#   sudo ./vmslogs.sh --since "2025-09-20" --until "2025-09-26"
+#   sudo ./vmslogs.sh --boots 6
 #
 # Dependencies: systemd-journald, last(1); optional: ipmitool, apcupsd, NUT
 #
