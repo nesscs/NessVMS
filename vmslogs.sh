@@ -11,7 +11,7 @@
 #
 # Dependencies: systemd-journald, last(1); optional: ipmitool, apcupsd, NUT
 #
-# sudo wget -O - https://nesscs.com/logs | bash
+# sudo wget -O - https://nesscs.com/vmslogs | bash
 
 
 set -euo pipefail
