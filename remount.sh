@@ -6,7 +6,7 @@
 # - Attempts to unmount the old mountpoint and mount at the new one.
 # - NO formatting or data changes.
 #
-# wget -O - https://nesscs.com/remount | sudo bash
+# sudo wget -O - https://nesscs.com/remount | bash
 
 set -euo pipefail
 
