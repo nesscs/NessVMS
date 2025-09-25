@@ -3,6 +3,8 @@
 # - Mount path: /mnt/<SERIAL> when available & unique, else /mnt/<UUID>
 # - Safe boot flags: nofail,noatime,nosuid,nodev,x-systemd.device-timeout=5s
 # DANGER: This will ERASE matching disks. Review the list before typing 'yes'.
+#
+# wget -O - https://nesscs.com/storage | sudo bash
 
 set -euo pipefail
 
