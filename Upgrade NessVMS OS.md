@@ -3,7 +3,7 @@
 ## Warning
 Although this guide & scripts are public facing, they are not intended for general consumption. Do not blindly run these scripts, they are unsupported. 
 
-THIS SCRIPT DOES NOT WORK 100% OF THE TIME! BE READY FOR THIS!
+# THIS SCRIPT DOES NOT WORK 100% OF THE TIME! BE READY FOR THIS!
 
 ## Prerequisites
 NessVMS OS is based upon Ubuntu LTS with extremely minimal changes. Some VMS will have shipped with Ubuntu 18.04 LTS which is now end of life and soon to be unsupported by NxWitness/DW Spectrum. 
@@ -120,4 +120,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 
