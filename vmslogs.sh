@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 # vmslogs.sh - Summarise restart/power events with timestamp and reason (Ubuntu 18–24)
-# Usage: sudo ./vmslogs.sh [--since <timespec>] [--until <timespec>] [--debug]
-# Examples:
-#   sudo ./vmslogs.sh
-#   sudo ./vmslogs.sh --since 30days
-#   sudo ./vmslogs.sh --since "2025-01-01" --until "2025-09-26" --debug
+# Hosted at: https://nesscs.com/vmslogs
+#
+# Quick run (no install):
+#   sudo wget -qO- https://nesscs.com/vmslogs | sudo bash
+#
+# With options (example: look back 7 days with debug enabled):
+#   sudo wget -qO- https://nesscs.com/vmslogs | sudo bash -s -- --since 7days --debug
+#
+# Options:
+#   --since <timespec>   e.g. 7days, "2025-01-01"
+#   --until <timespec>   end of window
+#   --debug              show matching journal lines
+#   --help               show this usage message
 
 set -euo pipefail
 
@@ -17,13 +25,41 @@ SINCE=""
 UNTIL=""
 DEBUG=0
 
+show_help() {
+  cat <<EOF
+Usage:
+  sudo wget -qO- https://nesscs.com/vmslogs | sudo bash -s -- [options]
+
+Options:
+  --since <timespec>   e.g. 7days, "2025-01-01"
+  --until <timespec>   end of window
+  --debug              show matching journal lines
+  --help               show this message
+
+Examples:
+  # Show all restarts/shutdowns:
+  sudo wget -qO- https://nesscs.com/vmslogs | sudo bash
+
+  # Look back 7 days with debug enabled:
+  sudo wget -qO- https://nesscs.com/vmslogs | sudo bash -s -- --since 7days --debug
+EOF
+}
+
+# If running in a pipe (wget|bash or curl|bash), print a hint
+if [[ -t 1 && -p /dev/stdin ]]; then
+  echo "# Running vmslogs.sh from stream"
+  echo "# Tip: use --help for usage info"
+  echo
+fi
+
 # --- Parse args ---
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --since) shift; SINCE="${1:-}";;
     --until) shift; UNTIL="${1:-}";;
     --debug) DEBUG=1;;
-    *) echo "Unknown arg: $1" >&2; exit 1;;
+    --help) show_help; exit 0;;
+    *) echo "Unknown arg: $1"; echo "Use --help for usage."; exit 1;;
   esac
   shift || true
 done
@@ -88,11 +124,9 @@ journal_reason() {
     return 0
   fi
 
-  # Pull the window once
   local J
   J="$(journalctl -o short-iso --no-pager --since "$start_win" --until "$end_win" 2>/dev/null || true)"
 
-  # --- Clean shutdown/reboot (systemd-shutdown) ---
   if grep -Eiq 'systemd-shutdown\[[0-9]+\]: Powering down\.' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: systemd-shutdown Powering down." >&2
     echo "clean poweroff"; return 0
@@ -111,7 +145,6 @@ journal_reason() {
     [[ "$event_type" == "reboot" ]] && { echo "clean reboot"; return 0; }
   fi
 
-  # --- Operator-initiated signals ---
   if grep -Eiq 'systemd-logind\[[0-9]+\]: (Power key pressed|Power Button)' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: logind power button" >&2
     echo "power button"; return 0
@@ -122,13 +155,11 @@ journal_reason() {
     return 0
   fi
 
-  # --- UPS/NUT/APC initiated ---
   if grep -Eiq '(apcupsd|apcdaemon|upsmon|nut)\[.*\].*(on battery|LOWBATT|shutdown|power off)' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: UPS/NUT/APC" >&2
     echo "UPS initiated"; return 0
   fi
 
-  # --- Kernel/system fault lines ---
   if grep -Eiq 'Kernel panic|panic:|Oops:|BUG: unable to handle kernel' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: kernel panic/oops" >&2
     echo "kernel panic"; return 0
@@ -142,7 +173,6 @@ journal_reason() {
     echo "thermal protection"; return 0
   fi
 
-  # --- OOM earlier can precede reset ---
   local JOOM
   JOOM="$(journalctl -o short-iso --no-pager --since "$start_oom" --until "$end_win" 2>/dev/null || true)"
   if grep -Eiq 'Out of memory: Killed process' <<<"$JOOM"; then
@@ -150,7 +180,6 @@ journal_reason() {
     echo "out-of-memory"; return 0
   fi
 
-  # --- Filesystem recovery on next boot implies prior unclean ---
   if grep -Eiq 'EXT4-fs .*recovering journal|xfslog.*Mounting|dirty log' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: fs recovery suggests prior unclean" >&2
     echo "unclean shutdown (likely power loss)"; return 0
@@ -163,15 +192,12 @@ journal_reason() {
   echo "unknown"
 }
 
-# --- Build a list of reboot/shutdown events from `last -xF`, oldest -> newest ---
-build_last_query() { echo "last -xF"; }
-
+# --- Build list of events from `last -xF`, oldest -> newest ---
 mapfile -t EVENTS < <(
-  $(build_last_query) \
+  last -xF \
   | awk '
       BEGIN { OFS="|" }
       tolower($1) ~ /^(reboot|shutdown)$/ {
-        # Extract start timestamp from the last 5 fields: Day Mon DD HH:MM:SS YYYY
         n = NF
         year = $(n)
         time = $(n-1)
@@ -187,7 +213,6 @@ mapfile -t EVENTS < <(
 )
 
 # --- Output ---
-# Each line: "YYYY-MM-DD HH:MM:SS  reason"
 for line in "${EVENTS[@]}"; do
   IFS='|' read -r etype start_raw <<<"$line"
   t_iso="$(to_iso "$start_raw")"
