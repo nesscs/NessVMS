@@ -18,14 +18,15 @@ set -euo pipefail
 export LC_ALL=C
 
 # ---- Configurable look-back/around windows ----
-AROUND_BEFORE_MIN=${AROUND_BEFORE_MIN:-10}
-AROUND_AFTER_MIN=${AROUND_AFTER_MIN:-5}
+# (widened a bit to catch slow/late shutdown logs)
+AROUND_BEFORE_MIN=${AROUND_BEFORE_MIN:-20}
+AROUND_AFTER_MIN=${AROUND_AFTER_MIN:-10}
 OOM_LOOKBACK_MIN=${OOM_LOOKBACK_MIN:-60}
 
 SINCE=""
 UNTIL=""
 DEBUG=0
-DEBUG_LOG="~/vmslogs-debug.log"
+DEBUG_LOG="/var/log/vmslogs-debug.log"
 
 show_help() {
   cat <<EOF
@@ -93,7 +94,7 @@ if [[ $JOURNALCTL_OK -eq 1 && ! -d /var/log/journal ]]; then
   echo "# You may only see current-boot details."
 fi
 
-# Convert "Mon Sep 23 10:11:12 2025" -> "2025-09-23 10:11:12"
+# --- Time helpers (epoch-safe) ---
 to_iso() { date -d "$1" +"%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$1"; }
 to_epoch() { date -d "$1" +%s 2>/dev/null || echo 0; }
 epoch_to_iso() { date -d "@$1" +"%Y-%m-%d %H:%M:%S"; }
@@ -125,9 +126,10 @@ log_debug() {
   fi
 }
 
+# --- Classification using journalctl + fallbacks ---
 journal_reason() {
-  local t_iso="$1"
-  local event_type="$2"
+  local t_iso="$1"       # "YYYY-MM-DD HH:MM:SS"
+  local event_type="$2"  # reboot|shutdown
 
   local start_win end_win start_oom
   start_win=$(shift_minutes "$t_iso" $((-AROUND_BEFORE_MIN)))
@@ -142,39 +144,33 @@ journal_reason() {
   local J
   J="$(journalctl -o short-iso --no-pager --since "$start_win" --until "$end_win" 2>/dev/null || true)"
 
-  if grep -Eiq 'systemd-shutdown\[[0-9]+\]: Powering down\.' <<<"$J"; then
-    log_debug "[$t_iso] clean poweroff matched systemd-shutdown"
-    echo "clean poweroff"; return 0
+  # --- Clean shutdown/reboot (cover Ubuntu 18–24 variants) ---
+  if grep -Eiq 'systemd-shutdown\[[0-9]+\]: (Powering down\.|Rebooting\.)' <<<"$J"; then
+    log_debug "[$t_iso] matched systemd-shutdown final line"
+    [[ "$event_type" == "shutdown" ]] && echo "clean poweroff" || echo "clean reboot"
+    return 0
   fi
-  if grep -Eiq 'systemd-shutdown\[[0-9]+\]: Rebooting\.' <<<"$J"; then
-    log_debug "[$t_iso] clean reboot matched systemd-shutdown"
-    echo "clean reboot"; return 0
+  if grep -Eiq 'systemd-logind\[[0-9]+\]: (System is powering down|Power key pressed|Power Button)' <<<"$J"; then
+    log_debug "[$t_iso] matched logind powerdown/button"
+    [[ "$event_type" == "shutdown" ]] && echo "clean poweroff" || echo "clean reboot"
+    return 0
   fi
-  if grep -Eiq '\breboot: Restarting system\b' <<<"$J"; then
-    log_debug "[$t_iso] clean reboot matched reboot: Restarting system"
-    echo "clean reboot"; return 0
+  if grep -Eiq 'systemd\[1\]: (Starting Power-Off|Reached target Shutdown|Shutting down\.)' <<<"$J"; then
+    log_debug "[$t_iso] matched systemd power-off/target/shutting down"
+    [[ "$event_type" == "shutdown" ]] && echo "clean poweroff" || echo "clean reboot"
+    return 0
   fi
-  if grep -Eiq 'systemd\[1\]: (Starting|Reached target) (Reboot|Power-Off)' <<<"$J"; then
-    log_debug "[$t_iso] clean $event_type matched systemd target"
-    [[ "$event_type" == "shutdown" ]] && { echo "clean poweroff"; return 0; }
-    [[ "$event_type" == "reboot" ]] && { echo "clean reboot"; return 0; }
-  fi
-
-  if grep -Eiq 'systemd-logind\[[0-9]+\]: (Power key pressed|Power Button)' <<<"$J"; then
-    log_debug "[$t_iso] power button detected"
-    echo "power button"; return 0
-  fi
-  if grep -Eiq 'dbus-daemon\[[0-9]+\]: .* (Shutdown|Reboot) scheduled' <<<"$J"; then
-    log_debug "[$t_iso] dbus scheduled $event_type"
+  if grep -Eiq '\breboot: (Power down|Restarting system)\b' <<<"$J"; then
+    log_debug "[$t_iso] matched kernel reboot/power down line"
     [[ "$event_type" == "shutdown" ]] && echo "clean poweroff" || echo "clean reboot"
     return 0
   fi
 
+  # --- Operator/UPS/fault signatures ---
   if grep -Eiq '(apcupsd|apcdaemon|upsmon|nut)\[.*\].*(on battery|LOWBATT|shutdown|power off)' <<<"$J"; then
     log_debug "[$t_iso] UPS initiated shutdown"
     echo "UPS initiated"; return 0
   fi
-
   if grep -Eiq 'Kernel panic|panic:|Oops:|BUG: unable to handle kernel' <<<"$J"; then
     log_debug "[$t_iso] kernel panic/oops"
     echo "kernel panic"; return 0
@@ -188,6 +184,7 @@ journal_reason() {
     echo "thermal protection"; return 0
   fi
 
+  # --- OOM earlier can precede reset ---
   local JOOM
   JOOM="$(journalctl -o short-iso --no-pager --since "$start_oom" --until "$end_win" 2>/dev/null || true)"
   if grep -Eiq 'Out of memory: Killed process' <<<"$JOOM"; then
@@ -195,12 +192,38 @@ journal_reason() {
     echo "out-of-memory"; return 0
   fi
 
+  # --- Filesystem recovery implies prior unclean shutdown ---
   if grep -Eiq 'EXT4-fs .*recovering journal|xfslog.*Mounting|dirty log' <<<"$J"; then
-    log_debug "[$t_iso] filesystem recovery implies unclean shutdown"
+    log_debug "[$t_iso] filesystem recovery suggests prior unclean shutdown"
     echo "unclean shutdown (likely power loss)"; return 0
   fi
 
-  log_debug "[$t_iso] no signature matched; journal window:"
+  # --- Fallbacks when journal lacks clean signatures ---
+  # If this event is a reboot and there was a shutdown shortly before, assume clean.
+  if [[ "$event_type" == "reboot" ]]; then
+    local t_epoch prev_epoch
+    t_epoch=$(to_epoch "$t_iso")
+    prev_epoch=$(to_epoch "$(shift_minutes "$t_iso" -20)")
+    if last -xF | awk -v start="$prev_epoch" -v end="$t_epoch" '
+        tolower($1)=="shutdown" {
+          n=NF; year=$(n); time=$(n-1); day=$(n-2); mon=$(n-3); dow=$(n-4);
+          gsub(/,/, "", dow); gsub(/,/, "", mon); gsub(/,/, "", day); gsub(/,/, "", time); gsub(/,/, "", year);
+          cmd="date -d \""dow" "mon" "day" "time" "year"\" +%s"; cmd | getline se; close(cmd);
+          if (se>=start && se<=end) { print "HIT"; exit }
+        }' | grep -q HIT; then
+      log_debug "[$t_iso] fallback: found recent 'shutdown' in last -x"
+      echo "clean reboot (fallback via last)"; return 0
+    fi
+  fi
+
+  # If this event is a shutdown entry from last(1), trust it as clean.
+  if [[ "$event_type" == "shutdown" ]]; then
+    log_debug "[$t_iso] fallback: trusting 'shutdown' event from last -x"
+    echo "clean poweroff (fallback via last)"; return 0
+  fi
+
+  # No match
+  log_debug "[$t_iso] no signature matched; journal window below:"
   log_debug "$J"
   echo "unknown"
 }
