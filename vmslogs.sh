@@ -15,6 +15,7 @@
 #   --help               show this usage message
 
 set -euo pipefail
+export LC_ALL=C
 
 # ---- Configurable look-back/around windows ----
 AROUND_BEFORE_MIN=${AROUND_BEFORE_MIN:-10}  # minutes to search BEFORE an event
@@ -93,17 +94,28 @@ to_iso() {
   date -d "$1" +"%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$1"
 }
 
+# Epoch helpers to avoid fragile "date -d '... - 60 minutes'" parsing
+to_epoch() { date -d "$1" +%s 2>/dev/null || echo 0; }
+epoch_to_iso() { date -d "@$1" +"%Y-%m-%d %H:%M:%S"; }
+shift_minutes() {
+  # $1 = ISO time, $2 = delta minutes (can be negative)
+  local base_ts; base_ts=$(to_epoch "$1")
+  local delta_sec=$(( $2 * 60 ))
+  local new_ts=$(( base_ts + delta_sec ))
+  epoch_to_iso "$new_ts"
+}
+
 # Post-filter by --since/--until (if set)
 within_bounds() {
   local t_iso="$1"
   if [[ -n "$SINCE" ]]; then
     local s; s=$(date -d "$SINCE" +%s 2>/dev/null || echo 0)
-    local ts; ts=$(date -d "$t_iso" +%s 2>/dev/null || echo 0)
+    local ts; ts=$(to_epoch "$t_iso")
     (( ts < s )) && return 1
   fi
   if [[ -n "$UNTIL" ]]; then
     local u; u=$(date -d "$UNTIL" +%s 2>/dev/null || echo 32503680000)
-    local ts; ts=$(date -d "$t_iso" +%s 2>/dev/null || echo 0)
+    local ts; ts=$(to_epoch "$t_iso")
     (( ts > u )) && return 1
   fi
   return 0
@@ -113,11 +125,12 @@ within_bounds() {
 journal_reason() {
   local t_iso="$1"       # "YYYY-MM-DD HH:MM:SS"
   local event_type="$2"  # reboot|shutdown
-  local start_win end_win start_oom
 
-  start_win=$(date -d "$t_iso - ${AROUND_BEFORE_MIN} minutes" +"%Y-%m-%d %H:%M:%S")
-  end_win=$(date -d "$t_iso + ${AROUND_AFTER_MIN} minutes" +"%Y-%m-%d %H:%M:%S")
-  start_oom=$(date -d "$t_iso - ${OOM_LOOKBACK_MIN} minutes" +"%Y-%m-%d %H:%M:%S")
+  # Windows via epoch arithmetic (robust)
+  local start_win end_win start_oom
+  start_win=$(shift_minutes "$t_iso" $((-AROUND_BEFORE_MIN)))
+  end_win=$(shift_minutes "$t_iso" $((AROUND_AFTER_MIN)))
+  start_oom=$(shift_minutes "$t_iso" $((-OOM_LOOKBACK_MIN)))
 
   if [[ $JOURNALCTL_OK -ne 1 ]]; then
     echo "unknown"
@@ -127,6 +140,7 @@ journal_reason() {
   local J
   J="$(journalctl -o short-iso --no-pager --since "$start_win" --until "$end_win" 2>/dev/null || true)"
 
+  # --- Clean shutdown/reboot (systemd-shutdown) ---
   if grep -Eiq 'systemd-shutdown\[[0-9]+\]: Powering down\.' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: systemd-shutdown Powering down." >&2
     echo "clean poweroff"; return 0
@@ -145,6 +159,7 @@ journal_reason() {
     [[ "$event_type" == "reboot" ]] && { echo "clean reboot"; return 0; }
   fi
 
+  # --- Operator-initiated signals ---
   if grep -Eiq 'systemd-logind\[[0-9]+\]: (Power key pressed|Power Button)' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: logind power button" >&2
     echo "power button"; return 0
@@ -155,11 +170,13 @@ journal_reason() {
     return 0
   fi
 
+  # --- UPS/NUT/APC initiated ---
   if grep -Eiq '(apcupsd|apcdaemon|upsmon|nut)\[.*\].*(on battery|LOWBATT|shutdown|power off)' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: UPS/NUT/APC" >&2
     echo "UPS initiated"; return 0
   fi
 
+  # --- Kernel/system fault lines ---
   if grep -Eiq 'Kernel panic|panic:|Oops:|BUG: unable to handle kernel' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: kernel panic/oops" >&2
     echo "kernel panic"; return 0
@@ -173,6 +190,7 @@ journal_reason() {
     echo "thermal protection"; return 0
   fi
 
+  # --- OOM earlier can precede reset ---
   local JOOM
   JOOM="$(journalctl -o short-iso --no-pager --since "$start_oom" --until "$end_win" 2>/dev/null || true)"
   if grep -Eiq 'Out of memory: Killed process' <<<"$JOOM"; then
@@ -180,6 +198,7 @@ journal_reason() {
     echo "out-of-memory"; return 0
   fi
 
+  # --- Filesystem recovery on next boot implies prior unclean ---
   if grep -Eiq 'EXT4-fs .*recovering journal|xfslog.*Mounting|dirty log' <<<"$J"; then
     [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: fs recovery suggests prior unclean" >&2
     echo "unclean shutdown (likely power loss)"; return 0
