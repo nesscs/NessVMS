@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 # vmslogs.sh — Minimal restart timeline for Ubuntu 22.04 bare metal
+#
+# Stream and run directly with:
+#   sudo wget -qO- https://nesscs.com/vmslogs | sudo bash
+#
 # Output lines: "YYYY-MM-DD HH:MM:SS — REASON (optional cause)"
 # Reasons: REBOOT, POWEROFF, UNEXPECTED_POWERLOSS
-# Causes (if detected within 15m before shutdown/reboot): KERNEL_PANIC, WATCHDOG, MCE, OOM, POWER_KEY, CMD
+# Causes (if detected within 15m before shutdown/reboot):
+#   KERNEL_PANIC, WATCHDOG, MCE, OOM, POWER_KEY, CMD
 # Also flags UNEXPECTED_POWERLOSS if a boot occurs with no shutdown logged beforehand.
 #
 # Usage:
@@ -54,9 +59,7 @@ function print_event(ts, reason, cause, now,   out){
   ts=$1" "$2; line=$0
   # Track boots so we can infer "no shutdown logged"
   if (line ~ /(kernel: Linux version|systemd\[1\]: Started Journal Service|systemd\[1\]: Startup finished)/) {
-    # If the previous boot did not end with a clean event, flag unexpected power loss at this boot time
     if (seen_boot && !had_clean_shutdown_since_boot) {
-      # avoid duplicate if FS recovery already printed an UNEXPECTED_POWERLOSS just above
       if (!flagged_powerloss_at_boot[ts]) {
         print ts" — UNEXPECTED_POWERLOSS (no shutdown logged)"
       }
@@ -66,7 +69,7 @@ function print_event(ts, reason, cause, now,   out){
     next
   }
 
-  # Capture “likely causes” that happen shortly before shutdown/reboot
+  # Capture possible causes
   if (line ~ /(Kernel panic|not syncing:)/)                     { cause="KERNEL_PANIC"; cause_t=to_epoch(ts); next }
   if (line ~ /(watchdog:|hard LOCKUP)/)                         { cause="WATCHDOG";    cause_t=to_epoch(ts); next }
   if (line ~ /(mce:|Machine check|Hardware Error)/)             { cause="MCE";         cause_t=to_epoch(ts); next }
@@ -74,7 +77,7 @@ function print_event(ts, reason, cause, now,   out){
   if (line ~ /(systemd-logind).*Power key pressed/)             { cause="POWER_KEY";   cause_t=to_epoch(ts); next }
   if (line ~ /(sudo: .* (shutdown|poweroff|reboot)|systemctl .* (reboot|poweroff)|shutdown\[)/) { cause="CMD"; cause_t=to_epoch(ts); next }
 
-  # Filesystem recovery hints right after a crashy stop (various FS)
+  # Filesystem recovery hints (ext4, xfs, btrfs, zfs, f2fs)
   if (line ~ /(EXT4-fs .* (recovery required|recovering journal)|EXT4-fs .* was not properly unmounted)/ ||
       line ~ /(XFS \(.*\): (log recovery|dirty log|Unclean shutdown detected))/ ||
       line ~ /(BTRFS( info| warning) .* (transaction aborted|forced readonly|log replay))/ ||
@@ -85,12 +88,16 @@ function print_event(ts, reason, cause, now,   out){
     next
   }
 
-  # Clean reboot/poweroff
+  # Clean reboot
   if (line ~ /(systemd-shutdown|Reached target Reboot|reboot: Restarting system|Rebooting\.)/) {
-    now=to_epoch(ts); print_event(ts,"REBOOT",cause,now); had_clean_shutdown_since_boot=1; cause=""; cause_t=0; next
+    now=to_epoch(ts); print_event(ts,"REBOOT",cause,now)
+    had_clean_shutdown_since_boot=1; cause=""; cause_t=0; next
   }
+
+  # Clean poweroff
   if (line ~ /(Powering off|Reached target Power-Off|Shutting down)/) {
-    now=to_epoch(ts); print_event(ts,"POWEROFF",cause,now); had_clean_shutdown_since_boot=1; cause=""; cause_t=0; next
+    now=to_epoch(ts); print_event(ts,"POWEROFF",cause,now)
+    had_clean_shutdown_since_boot=1; cause=""; cause_t=0; next
   }
 }
 ' | sort
