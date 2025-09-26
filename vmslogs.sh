@@ -11,20 +11,21 @@
 # Options:
 #   --since <timespec>   e.g. 7days, "2025-01-01"
 #   --until <timespec>   end of window
-#   --debug              show matching journal lines
+#   --debug              write detailed journal snippets to /var/log/vmslogs-debug.log
 #   --help               show this usage message
 
 set -euo pipefail
 export LC_ALL=C
 
 # ---- Configurable look-back/around windows ----
-AROUND_BEFORE_MIN=${AROUND_BEFORE_MIN:-10}  # minutes to search BEFORE an event
-AROUND_AFTER_MIN=${AROUND_AFTER_MIN:-5}     # minutes to search AFTER an event
-OOM_LOOKBACK_MIN=${OOM_LOOKBACK_MIN:-60}    # longer look-back for OOMs
+AROUND_BEFORE_MIN=${AROUND_BEFORE_MIN:-10}
+AROUND_AFTER_MIN=${AROUND_AFTER_MIN:-5}
+OOM_LOOKBACK_MIN=${OOM_LOOKBACK_MIN:-60}
 
 SINCE=""
 UNTIL=""
 DEBUG=0
+DEBUG_LOG="~/vmslogs-debug.log"
 
 show_help() {
   cat <<EOF
@@ -34,14 +35,11 @@ Usage:
 Options:
   --since <timespec>   e.g. 7days, "2025-01-01"
   --until <timespec>   end of window
-  --debug              show matching journal lines
+  --debug              write detailed journal snippets to $DEBUG_LOG
   --help               show this message
 
 Examples:
-  # Show all restarts/shutdowns:
   sudo wget -qO- https://nesscs.com/vmslogs | sudo bash
-
-  # Look back 7 days with debug enabled:
   sudo wget -qO- https://nesscs.com/vmslogs | sudo bash -s -- --since 7days --debug
 EOF
 }
@@ -81,31 +79,31 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Prepare debug log if needed
+if [[ $DEBUG -eq 1 ]]; then
+  mkdir -p "$(dirname "$DEBUG_LOG")"
+  {
+    echo "========== vmslogs run $(date '+%Y-%m-%d %H:%M:%S') =========="
+  } >>"$DEBUG_LOG"
+fi
+
 # Warn if persistent journal is not enabled
 if [[ $JOURNALCTL_OK -eq 1 && ! -d /var/log/journal ]]; then
   echo "# Note: /var/log/journal is missing (journal not persistent)."
-  echo "# You may only see current-boot details. To persist:"
-  echo "#   mkdir -p /var/log/journal && systemd-tmpfiles --create --prefix /var/log/journal"
-  echo
+  echo "# You may only see current-boot details."
 fi
 
 # Convert "Mon Sep 23 10:11:12 2025" -> "2025-09-23 10:11:12"
-to_iso() {
-  date -d "$1" +"%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$1"
-}
-
-# Epoch helpers to avoid fragile "date -d '... - 60 minutes'" parsing
+to_iso() { date -d "$1" +"%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$1"; }
 to_epoch() { date -d "$1" +%s 2>/dev/null || echo 0; }
 epoch_to_iso() { date -d "@$1" +"%Y-%m-%d %H:%M:%S"; }
 shift_minutes() {
-  # $1 = ISO time, $2 = delta minutes (can be negative)
   local base_ts; base_ts=$(to_epoch "$1")
   local delta_sec=$(( $2 * 60 ))
   local new_ts=$(( base_ts + delta_sec ))
   epoch_to_iso "$new_ts"
 }
 
-# Post-filter by --since/--until (if set)
 within_bounds() {
   local t_iso="$1"
   if [[ -n "$SINCE" ]]; then
@@ -121,12 +119,16 @@ within_bounds() {
   return 0
 }
 
-# Classification using journalctl (preferred)
-journal_reason() {
-  local t_iso="$1"       # "YYYY-MM-DD HH:MM:SS"
-  local event_type="$2"  # reboot|shutdown
+log_debug() {
+  if [[ $DEBUG -eq 1 ]]; then
+    echo "$@" >>"$DEBUG_LOG"
+  fi
+}
 
-  # Windows via epoch arithmetic (robust)
+journal_reason() {
+  local t_iso="$1"
+  local event_type="$2"
+
   local start_win end_win start_oom
   start_win=$(shift_minutes "$t_iso" $((-AROUND_BEFORE_MIN)))
   end_win=$(shift_minutes "$t_iso" $((AROUND_AFTER_MIN)))
@@ -140,74 +142,66 @@ journal_reason() {
   local J
   J="$(journalctl -o short-iso --no-pager --since "$start_win" --until "$end_win" 2>/dev/null || true)"
 
-  # --- Clean shutdown/reboot (systemd-shutdown) ---
   if grep -Eiq 'systemd-shutdown\[[0-9]+\]: Powering down\.' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: systemd-shutdown Powering down." >&2
+    log_debug "[$t_iso] clean poweroff matched systemd-shutdown"
     echo "clean poweroff"; return 0
   fi
   if grep -Eiq 'systemd-shutdown\[[0-9]+\]: Rebooting\.' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: systemd-shutdown Rebooting." >&2
+    log_debug "[$t_iso] clean reboot matched systemd-shutdown"
     echo "clean reboot"; return 0
   fi
   if grep -Eiq '\breboot: Restarting system\b' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: reboot: Restarting system" >&2
+    log_debug "[$t_iso] clean reboot matched reboot: Restarting system"
     echo "clean reboot"; return 0
   fi
   if grep -Eiq 'systemd\[1\]: (Starting|Reached target) (Reboot|Power-Off)' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: systemd[1] Reboot/Power-Off target" >&2
+    log_debug "[$t_iso] clean $event_type matched systemd target"
     [[ "$event_type" == "shutdown" ]] && { echo "clean poweroff"; return 0; }
     [[ "$event_type" == "reboot" ]] && { echo "clean reboot"; return 0; }
   fi
 
-  # --- Operator-initiated signals ---
   if grep -Eiq 'systemd-logind\[[0-9]+\]: (Power key pressed|Power Button)' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: logind power button" >&2
+    log_debug "[$t_iso] power button detected"
     echo "power button"; return 0
   fi
   if grep -Eiq 'dbus-daemon\[[0-9]+\]: .* (Shutdown|Reboot) scheduled' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: dbus-daemon Shutdown/Reboot scheduled" >&2
+    log_debug "[$t_iso] dbus scheduled $event_type"
     [[ "$event_type" == "shutdown" ]] && echo "clean poweroff" || echo "clean reboot"
     return 0
   fi
 
-  # --- UPS/NUT/APC initiated ---
   if grep -Eiq '(apcupsd|apcdaemon|upsmon|nut)\[.*\].*(on battery|LOWBATT|shutdown|power off)' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: UPS/NUT/APC" >&2
+    log_debug "[$t_iso] UPS initiated shutdown"
     echo "UPS initiated"; return 0
   fi
 
-  # --- Kernel/system fault lines ---
   if grep -Eiq 'Kernel panic|panic:|Oops:|BUG: unable to handle kernel' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: kernel panic/oops" >&2
+    log_debug "[$t_iso] kernel panic/oops"
     echo "kernel panic"; return 0
   fi
   if grep -Eiq 'watchdog.*(hard LOCKUP|reboot|NMI watchdog)' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: watchdog" >&2
+    log_debug "[$t_iso] watchdog reset"
     echo "watchdog reset"; return 0
   fi
   if grep -Eiq '(Thermal|thermal).* (critical|overheat|overheated|shutdown)' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: thermal" >&2
+    log_debug "[$t_iso] thermal protection"
     echo "thermal protection"; return 0
   fi
 
-  # --- OOM earlier can precede reset ---
   local JOOM
   JOOM="$(journalctl -o short-iso --no-pager --since "$start_oom" --until "$end_win" 2>/dev/null || true)"
   if grep -Eiq 'Out of memory: Killed process' <<<"$JOOM"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: OOM (lookback)" >&2
+    log_debug "[$t_iso] out-of-memory event before shutdown"
     echo "out-of-memory"; return 0
   fi
 
-  # --- Filesystem recovery on next boot implies prior unclean ---
   if grep -Eiq 'EXT4-fs .*recovering journal|xfslog.*Mounting|dirty log' <<<"$J"; then
-    [[ $DEBUG -eq 1 ]] && echo "# DEBUG matched: fs recovery suggests prior unclean" >&2
+    log_debug "[$t_iso] filesystem recovery implies unclean shutdown"
     echo "unclean shutdown (likely power loss)"; return 0
   fi
 
-  if [[ $DEBUG -eq 1 ]]; then
-    echo "# DEBUG no signature matched for $t_iso ($event_type); window below:" >&2
-    echo "$J" >&2
-  fi
+  log_debug "[$t_iso] no signature matched; journal window:"
+  log_debug "$J"
   echo "unknown"
 }
 
@@ -239,3 +233,7 @@ for line in "${EVENTS[@]}"; do
   reason="$(journal_reason "$t_iso" "$etype")"
   printf "%s  %s\n" "$t_iso" "$reason"
 done
+
+if [[ $DEBUG -eq 1 ]]; then
+  echo "# Debug output written to $DEBUG_LOG"
+fi
