@@ -41,7 +41,7 @@ echo ""
 echo ""
 sudo apt upgrade -y
 #Download the latest Nx Server Release, enter desired build below
-nx_build=6.0.2.40414 #Builds from here https://updates.networkoptix.com/default/ Note full build No.
+nx_build=6.0.6.41837 #Builds from here https://updates.networkoptix.com/default/ Note full build No.
 echo ""
 echo ""
 echo -e "\e[7mDownload NxWitness Build $nx_build\e[0m"
