@@ -3,22 +3,30 @@
 # - Mount path: /mnt/<SERIAL> when available & unique, else /mnt/<UUID>
 # - Safe boot flags: nofail,noatime,nosuid,nodev,x-systemd.device-timeout=5s
 # DANGER: This will ERASE matching disks. Review the list before typing 'yes'.
-#
-# sudo wget -O - https://nesscs.com/storage | bash
 
 set -euo pipefail
+
+# ----- simple args -----
+YES=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -y|--yes) YES=1 ;;
+    *) echo "Unknown option: $1"; exit 2 ;;
+  esac
+  shift
+done
 
 # ----- logging -----
 LOG_DIR="/var/log"
 LOG_FILE="${LOG_DIR}/nvr-drive-setup-$(date +%Y%m%d-%H%M%S).log"
 mkdir -p "$LOG_DIR"
-# Create the log file early so the next line can append to it
 touch "$LOG_FILE"
 chmod 600 "$LOG_FILE"
-# Send stdout/stderr to both screen and log
+require_cmd() { command -v "$1" >/dev/null 2>&1 || { echo "Missing: $1"; exit 1; }; }
+require_cmd tee
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-# Print header (lines 2–5)
+# Header
 echo "------------------------------------------------------------"
 echo "Format & mount all non-root disks >= 200 GB (HDD/SSD/NVMe)"
 echo "- Mount path: /mnt/<SERIAL> when available & unique, else /mnt/<UUID>"
@@ -28,18 +36,46 @@ echo "Log file: $LOG_FILE"
 echo "------------------------------------------------------------"
 echo
 
+# ----- root check -----
+if [[ $EUID -ne 0 ]]; then
+  echo "Please run as root (use: sudo ... | bash)."
+  exit 1
+fi
+
 MIN_BYTES=200000000000   # 200 GB (decimal)
 MOUNT_BASE="/mnt"
 FSTAB="/etc/fstab"
 
-require_cmd() { command -v "$1" >/dev/null 2>&1 || { echo "Missing: $1"; exit 1; }; }
-require_cmd lsblk; require_cmd awk; require_cmd blkid; require_cmd mkfs.ext4
-require_cmd mount; require_cmd findmnt; require_cmd sed
+require_cmd lsblk; require_cmd awk; require_cmd blkid
+require_cmd mkfs.ext4; require_cmd mount; require_cmd findmnt; require_cmd sed
+
+# -- helper: confirmation that works even when piped --
+confirm_yes() {
+  if [[ $YES -eq 1 ]]; then
+    echo "Auto-confirm enabled (--yes). Proceeding..."
+    return 0
+  fi
+  local prompt="Do you want to continue? (yes/no): "
+  local reply=""
+  if [[ -t 0 ]]; then
+    # stdin is a TTY (not piped)
+    read -r -p "$prompt" reply
+  else
+    # piped; read from the controlling terminal
+    if [[ -r /dev/tty ]]; then
+      read -r -p "$prompt" reply < /dev/tty
+    else
+      echo "ERROR: No terminal available for interactive prompt. Use --yes to auto-confirm."
+      return 1
+    fi
+  fi
+  [[ "$reply" == "yes" ]]
+}
 
 echo "Scanning for whole disks >= 200 GB (bytes) ..."
 
-# Exclude the root OS disk (no matter SATA/NVMe)
-ROOT_SRC=$(findmnt -n -o SOURCE /)                       # e.g. /dev/nvme0n1p2 or /dev/sda2
+# Exclude the root OS disk
+ROOT_SRC=$(findmnt -n -o SOURCE /)
 ROOT_DISK=$(lsblk -no PKNAME "$ROOT_SRC" 2>/dev/null || true)
 [[ -z "${ROOT_DISK}" ]] && ROOT_DISK=$(basename "$ROOT_SRC")
 echo "Detected root source: $ROOT_SRC (root disk: $ROOT_DISK)"
@@ -67,8 +103,8 @@ for d in "${CANDIDATES[@]}"; do
   printf "  - /dev/%s  (%s)  %s  %s  [%s]\n" "$d" "$size" "${model:-}" "${serial:-}" "$media"
 done
 echo
-read -r -p "Do you want to continue? (yes/no): " CONFIRM
-if [[ "$CONFIRM" != "yes" ]]; then
+
+if ! confirm_yes; then
   echo "Aborting. No changes made."
   echo "See log: $LOG_FILE"
   exit 1
