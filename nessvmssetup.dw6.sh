@@ -1,7 +1,7 @@
 #!/bin/bash
 #Ness VMS Server Setup Script
 #https://github.com/nesscs/NessVMS
-#This script is for DW Spectrum Server V5
+#This script is for DW Spectrum Server V6
 #This script is unsupported, do not blindly run it
 
 #Set Machine Hostname to Last 4 digits of Network Interface
