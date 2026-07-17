@@ -41,8 +41,8 @@ echo ""
 echo ""
 sudo apt upgrade -y
 #Download the latest DW Spectrum Server Release, enter desired build below
-dx_build=6.0.6.41837 #Builds from here https://updates.digital-watchdog.com/digitalwatchdog/ Note full build No.
-dx_rev=41837
+dx_build=6.1.2.43047 #Builds from here https://updates.digital-watchdog.com/digitalwatchdog/ Note full build No.
+dx_rev=43047
 echo ""
 echo ""
 echo -e "\e[7mDownload DW Spectrum Build $dx_build \e[0m"
