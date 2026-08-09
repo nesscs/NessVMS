@@ -7,12 +7,12 @@
 set -euo pipefail
 
 # ===== Helpers =====
-need_root() {
-  if [[ $EUID -ne 0 ]]; then
-    echo "Please run as root (sudo)." >&2
-    exit 2
-  fi
-}
+# need_root() {
+#  if [[ $EUID -ne 0 ]]; then
+#    echo "Please run as root (sudo)." >&2
+#    exit 2
+#  fi
+# }
 
 ensure_smartctl() {
   if ! command -v smartctl >/dev/null 2>&1; then
