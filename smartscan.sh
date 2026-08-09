@@ -181,7 +181,7 @@ print_results_table() {
 }
 
 # ===== Main =====
-need_root
+# need_root
 ensure_smartctl
 
 mapfile -t NAMES < <(lsblk -dn -o NAME,TYPE | awk '$2=="disk"{print $1}')
